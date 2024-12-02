@@ -1,6 +1,7 @@
-package brcomkassin.crate.cache;
+package brcomkassin.crates.cache;
 
-import brcomkassin.crate.Crate;
+import brcomkassin.crates.Crate;
+import com.ticxo.modelengine.api.nms.NMSHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +11,7 @@ public class CrateCache implements CrateCacheService {
     private final Map<String, Crate> cache;
 
     public CrateCache() {
-        this.cache = new HashMap<>();
+        cache = new HashMap<>();
     }
 
     @Override
@@ -19,8 +20,17 @@ public class CrateCache implements CrateCacheService {
     }
 
     @Override
+    public boolean hasCrate(String key) {
+        return cache.containsKey(key);
+    }
+
+    @Override
     public void removeCrate(String key) {
         cache.remove(key);
     }
 
+    @Override
+    public Crate getCrate(String key) {
+        return cache.get(key);
+    }
 }

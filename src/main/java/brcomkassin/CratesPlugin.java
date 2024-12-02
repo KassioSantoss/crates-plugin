@@ -1,14 +1,13 @@
 package brcomkassin;
 
-import brcomkassin.crate.renderer.RendererCrate;
-import brcomkassin.crate.renderer.RendererCrateService;
+import brcomkassin.commands.CrateCommand;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class CratesPlugin extends JavaPlugin {
+
     @Getter
     private static CratesPlugin instance;
-    private final RendererCrateService rendererCrate = new RendererCrate();
 
     @Override
     public void onLoad() {
@@ -17,7 +16,7 @@ public final class CratesPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        rendererCrate.renderer();
+        getCommand("item").setExecutor(new CrateCommand());
         getLogger().info("Plugin CRATES inicializado com sucesso!");
     }
 
