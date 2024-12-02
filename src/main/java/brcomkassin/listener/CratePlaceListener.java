@@ -21,8 +21,6 @@ public class CratePlaceListener implements Listener {
         if (!itemInHand.getItemMeta().getPersistentDataContainer()
                 .has(new NamespacedKey(CratesPlugin.getInstance(), "black-crate"))) return;
 
-        crateService.spawn();
-
     }
 
 }
