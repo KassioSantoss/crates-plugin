@@ -9,9 +9,11 @@ import java.util.Map;
 public class CrateCache implements CrateCacheService {
 
     private final Map<String, Crate> cache;
+    private final Map<Integer, Crate> crateMap;
 
     public CrateCache() {
         cache = new HashMap<>();
+        crateMap = new HashMap<>();
     }
 
     @Override
@@ -30,7 +32,13 @@ public class CrateCache implements CrateCacheService {
     }
 
     @Override
-    public Crate getCrate(String key) {
+    public Crate getCrateById(String key) {
         return cache.get(key);
     }
+
+    @Override
+    public Crate getCrateByEntity(int id) {
+        return crateMap.get(id);
+    }
+
 }

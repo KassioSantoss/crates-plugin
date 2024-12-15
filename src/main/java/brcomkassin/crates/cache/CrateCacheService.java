@@ -9,5 +9,6 @@ public interface CrateCacheService {
 
     void removeCrate(String key);
 
-    Crate getCrate(String key);
+    Crate getCrateById(String key);
+    Crate getCrateByEntity(int id);
 }

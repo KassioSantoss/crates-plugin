@@ -32,7 +32,7 @@ public class DefaultCrateService implements CrateService {
         String id = getCrateIdFromItem(itemInHand, keyId);
 
         if (id == null) return;
-        Crate crate = cacheService.getCrate(id);
+        Crate crate = cacheService.getCrateById(id);
 
         if (crate == null) return;
         summonCrate(location, crate);
@@ -40,6 +40,14 @@ public class DefaultCrateService implements CrateService {
 
     @Override
     public void interactCrate(Entity entity, ItemStack item, String key) {
+        String keyId = getCrateIdFromItem(item, key);
+        if (keyId == null) return;
+
+        Crate crate = cacheService.getCrateByEntity(entity.getEntityId()); // retornar por loacation
+        if (crate == null) return;
+
+        if (!keyId.equals(crate.getId())) return;
+
         if (!(entity instanceof ArmorStand)) return;
 
         ModeledEntity modeledEntity = ModelEngineAPI.getModeledEntity(entity);
@@ -47,13 +55,6 @@ public class DefaultCrateService implements CrateService {
 
         Map<String, ActiveModel> activeModels = modeledEntity.getModels();
         if (activeModels.isEmpty()) return;
-
-        String id = getCrateIdFromItem(item, key);
-        Crate crate = cacheService.getCrate(id);
-
-        if (crate == null) return;
-
-        if (!crate.getId().equalsIgnoreCase(id)) return;
 
         ActiveModel activeModel = activeModels.get(crate.getId());
         AnimationHandler animationHandler = activeModel.getAnimationHandler();
