@@ -1,14 +1,34 @@
 package brcomkassin.crates.cache;
 
 import brcomkassin.crates.Crate;
+import java.util.HashMap;
+import java.util.Map;
 
-public interface CrateCacheService {
-    void addCrate(String key, Crate crate);
+public class CrateCacheService implements CrateCache {
 
-    boolean hasCrate(String key);
+    private final Map<String, Crate> cache;
 
-    void removeCrate(String key);
+    public CrateCacheService() {
+        this.cache = new HashMap<>();
+    }
 
-    Crate getCrateById(String key);
-    Crate getCrateByEntity(int id);
+    @Override
+    public void add(String key, Crate crate) {
+        cache.put(key, crate);
+    }
+
+    @Override
+    public void remove(String key, Crate crate) {
+        cache.remove(key, crate);
+    }
+
+    @Override
+    public void remove(String key) {
+        cache.remove(key);
+    }
+
+    @Override
+    public Crate getCrate(String key) {
+        return cache.get(key);
+    }
 }

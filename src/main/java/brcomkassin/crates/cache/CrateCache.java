@@ -1,44 +1,12 @@
 package brcomkassin.crates.cache;
 
 import brcomkassin.crates.Crate;
-import com.ticxo.modelengine.api.nms.NMSHandler;
 
-import java.util.HashMap;
-import java.util.Map;
+public interface CrateCache {
 
-public class CrateCache implements CrateCacheService {
-
-    private final Map<String, Crate> cache;
-    private final Map<Integer, Crate> crateMap;
-
-    public CrateCache() {
-        cache = new HashMap<>();
-        crateMap = new HashMap<>();
-    }
-
-    @Override
-    public void addCrate(String key, Crate crate) {
-        cache.put(key, crate);
-    }
-
-    @Override
-    public boolean hasCrate(String key) {
-        return cache.containsKey(key);
-    }
-
-    @Override
-    public void removeCrate(String key) {
-        cache.remove(key);
-    }
-
-    @Override
-    public Crate getCrateById(String key) {
-        return cache.get(key);
-    }
-
-    @Override
-    public Crate getCrateByEntity(int id) {
-        return crateMap.get(id);
-    }
+    void add(String key, Crate crate);
+    void remove(String key, Crate crate);
+    void remove(String key);
+    Crate getCrate(String key);
 
 }
