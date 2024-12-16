@@ -1,4 +1,4 @@
-package brcomkassin.crates;
+package brcomkassin.crates.renderer;
 
 import org.bukkit.configuration.file.FileConfiguration;
 

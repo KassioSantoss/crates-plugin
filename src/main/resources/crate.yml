@@ -1,6 +1,6 @@
 crates:
   my_first_crate:
-    key_crate_id: "unique id"
+    key_crate_id: "unique_id"
     display_name: "&aCaixa de Teste"
     item_model:
       custom_model_data: 123

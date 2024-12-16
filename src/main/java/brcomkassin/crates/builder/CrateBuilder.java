@@ -1,4 +1,9 @@
-package brcomkassin.crates;
+package brcomkassin.crates.builder;
+
+import brcomkassin.crates.Crate;
+import brcomkassin.crates.CrateMaterial;
+import brcomkassin.utils.ItemBuilder;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +68,17 @@ public class CrateBuilder {
             throw new IllegalStateException("O ID da caixa não pode ser nulo ou vazio.");
         }
 
+        ItemStack crateItem = ItemBuilder.of(CrateMaterial.DEFAULT_CRATE_MATERIAL.getMaterial())
+                .setName(crateDisplayName)
+                .setCustomModelData(crateCustomModelData)
+                .setItemMetaData(id)
+                .build();
+        ItemStack keyItem = ItemBuilder.of(CrateMaterial.DEFAULT_KEY_MATERIAL.getMaterial())
+                .setName(keyDisplayName)
+                .setCustomModelData(keyCustomModelData)
+                .setItemMetaData(id)
+                .build();
+
         return new Crate(
                 id,
                 crateDisplayName,
@@ -71,7 +87,9 @@ public class CrateBuilder {
                 keyCustomModelData,
                 entityModel,
                 animation,
-                new ArrayList<>(rewards)
+                new ArrayList<>(rewards),
+                keyItem,
+                crateItem
         );
     }
 }
