@@ -1,11 +1,7 @@
 package brcomkassin;
 
-import brcomkassin.crates.CrateRegistryService;
-import brcomkassin.crates.DefaultCrateRegistryService;
-import brcomkassin.crates.renderer.CrateRenderer;
-import brcomkassin.crates.renderer.DefaultCrateRenderer;
-import brcomkassin.crates.cache.CrateCache;
-import brcomkassin.crates.cache.CrateCacheService;
+import brcomkassin.crates.registrys.CrateRegistryService;
+import brcomkassin.crates.registrys.DefaultCrateRegistryService;
 import brcomkassin.utils.Config;
 import lombok.Getter;
 import org.bukkit.plugin.java.JavaPlugin;

@@ -4,7 +4,6 @@ import brcomkassin.crates.Crate;
 import brcomkassin.crates.CrateMaterial;
 import brcomkassin.utils.ItemBuilder;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.ArrayList;
 import java.util.List;
 

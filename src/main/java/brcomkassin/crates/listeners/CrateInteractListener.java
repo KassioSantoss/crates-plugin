@@ -1,6 +1,5 @@
 package brcomkassin.crates.listeners;
 
-import brcomkassin.crates.manager.CrateManager;
 import brcomkassin.crates.services.CrateService;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -23,7 +22,6 @@ public class CrateInteractListener implements Listener {
         Entity entity = event.getRightClicked();
         ItemStack itemInMainHand = player.getInventory().getItemInMainHand();
         crateService.openCrate(entity, itemInMainHand);
-        player.sendMessage("Caixa aberta com sucesso!");
     }
 
 }

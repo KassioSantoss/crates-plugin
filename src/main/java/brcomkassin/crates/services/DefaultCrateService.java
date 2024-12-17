@@ -10,9 +10,8 @@ import com.ticxo.modelengine.api.model.ModeledEntity;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.PluginLogger;
-
 import java.util.Map;
 
 public class DefaultCrateService implements CrateService {
@@ -26,8 +25,11 @@ public class DefaultCrateService implements CrateService {
     }
 
     @Override
-    public void summonCrate(Location location, Crate crate) {
-        ArmorStand box = location.getWorld().spawn(location.getBlock().getLocation(), ArmorStand.class);
+    public void summonCrate(Player player, Location location, Crate crate) {
+        if (crateCache.getLocationCrateMap().containsKey(location.getBlock().getLocation().add(0.5, 0, 0.5))) return;
+
+        Location centeredLocation = location.getBlock().getLocation().add(0.5, 0, 0.5);
+        ArmorStand box = centeredLocation.getWorld().spawn(centeredLocation, ArmorStand.class);
         ModeledEntity modeledEntity = ModelEngineAPI.createModeledEntity(box);
         ActiveModel activeModel = ModelEngineAPI.createActiveModel(crate.entityModel());
 
@@ -41,49 +43,37 @@ public class DefaultCrateService implements CrateService {
         box.setSmall(false);
         activeModel.setHitboxScale(1);
         modeledEntity.addModel(activeModel, true);
-        Location crateLocation =
-                new Location(location.getWorld(), location.getX(), location.getY() + 1, location.getZ());
-        crateCache.addCrateByLocation(crateLocation, crate);
-        PluginLogger.getGlobal().info("salvo na posiçao Y == " + crateLocation.getY());
+
+        crateCache.addCrateByLocation(centeredLocation, crate);
+        player.sendMessage("Caixa spawnada com sucesso!");
     }
 
     @Override
     public void openCrate(Entity entity, ItemStack item) {
-        if (!crateManager.isCrateEntity(entity)) {
-            PluginLogger.getGlobal().info("RETORNOU 1");
-            return;
-        }
+        if (!crateManager.isCrateEntity(entity)) return;
+
         ModeledEntity modeledEntity = ModelEngineAPI.getModeledEntity(entity);
-        if (modeledEntity == null) {
-            PluginLogger.getGlobal().info("RETORNOU 2");
-            return;
-        }
+        if (modeledEntity == null) return;
+
         Map<String, ActiveModel> activeModels = modeledEntity.getModels();
-        if (activeModels.isEmpty()) {
-            PluginLogger.getGlobal().info("RETORNOU 3");
-            return;
-        }
+        if (activeModels.isEmpty()) return;
+
         boolean keyItem = crateManager.isKeyItem(item);
 
-        if (!keyItem) {
-            PluginLogger.getGlobal().info("RETORNOU 4");
-            return;
-        }
-        Crate crate = crateManager.getCrateFromItem(item);
+        if (!keyItem) return;
+
+        Crate crate = crateManager.getCrateFromKey(item);
         Crate crateTarget = crateCache.getCrateByLocation(entity.getLocation());
-        PluginLogger.getGlobal().info(crateCache.getLocationCrateMap().toString());
 
-        if (crate == null || !crate.id().equals(crateTarget.id())) {
-            PluginLogger.getGlobal().info("ID DAS CAIXAS NAO CONDIZEM:");
-            PluginLogger.getGlobal().info("CAIXA ALVO ->" + crateTarget);
-            PluginLogger.getGlobal().info("CAIXA DO CACHE ->" + crate);
+        if (crate == null || crateTarget == null) return;
 
-            return;
-        }
-        PluginLogger.getGlobal().info("ABRIU");
-        ActiveModel activeModel = activeModels.get(crate.id());
+        if (!crate.id().equals(crateTarget.id())) return;
+
+        ActiveModel activeModel = activeModels.get(crate.entityModel());
         AnimationHandler animationHandler = activeModel.getAnimationHandler();
         animationHandler.playAnimation("open", 0.3, 0.3, 1, true);
+        if (!(entity instanceof Player player)) return;
+        player.sendMessage("Caixa aberta com sucesso!");
     }
 
 }

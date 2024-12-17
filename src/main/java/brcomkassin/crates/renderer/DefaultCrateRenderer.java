@@ -3,10 +3,10 @@ package brcomkassin.crates.renderer;
 import brcomkassin.crates.Crate;
 import brcomkassin.crates.builder.CrateBuilder;
 import brcomkassin.crates.cache.CrateCache;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginLogger;
-
 import java.util.List;
 
 public class DefaultCrateRenderer implements CrateRenderer {
@@ -41,16 +41,16 @@ public class DefaultCrateRenderer implements CrateRenderer {
             String animation = config.getString(PATH + crateID + ".entity_model.animation", "default_animation");
             List<String> rewards = config.getStringList(PATH + crateID + ".rewards");
 
-            PluginLogger.getGlobal().info("=========================================");
-            PluginLogger.getGlobal().info("ID: " + crateID + " -> keyAndCrateID: " + keyAndCrateID);
-            PluginLogger.getGlobal().info("ID: " + crateID + " -> crateDisplayName: " +crateDisplayName);
-            PluginLogger.getGlobal().info("ID: " + crateID + " -> crateCustomModelData: " +crateCustomModelData);
-            PluginLogger.getGlobal().info("ID: " + crateID + " -> keyDisplayName: " +keyDisplayName);
-            PluginLogger.getGlobal().info("ID: " + crateID + " -> keyCustomModelData: " +keyCustomModelData);
-            PluginLogger.getGlobal().info("ID: " + crateID + " -> entityModel: " +entityModel);
-            PluginLogger.getGlobal().info("ID: " + crateID + " -> animation: " +animation);
-            PluginLogger.getGlobal().info("ID: " + crateID + " -> rewards: " +rewards);
-            PluginLogger.getGlobal().info("=========================================");
+            PluginLogger.getGlobal().info(ChatColor.GREEN + "======================================================");
+            PluginLogger.getGlobal().info(ChatColor.YELLOW + "ID: " + crateID + ChatColor.WHITE + " -> keyAndCrateID: " + keyAndCrateID);
+            PluginLogger.getGlobal().info(ChatColor.YELLOW + "ID: " + crateID + ChatColor.WHITE + " -> crateDisplayName: " + crateDisplayName);
+            PluginLogger.getGlobal().info(ChatColor.YELLOW + "ID: " + crateID + ChatColor.WHITE + " -> crateCustomModelData: " + crateCustomModelData);
+            PluginLogger.getGlobal().info(ChatColor.YELLOW + "ID: " + crateID + ChatColor.WHITE + " -> keyDisplayName: " + keyDisplayName);
+            PluginLogger.getGlobal().info(ChatColor.YELLOW + "ID: " + crateID + ChatColor.WHITE + " -> keyCustomModelData: " + keyCustomModelData);
+            PluginLogger.getGlobal().info(ChatColor.YELLOW + "ID: " + crateID + ChatColor.WHITE + " -> entityModel: " + entityModel);
+            PluginLogger.getGlobal().info(ChatColor.YELLOW + "ID: " + crateID + ChatColor.WHITE + " -> animation: " + animation);
+            PluginLogger.getGlobal().info(ChatColor.YELLOW + "ID: " + crateID + ChatColor.WHITE + " -> rewards: " + rewards);
+            PluginLogger.getGlobal().info(ChatColor.GREEN + "======================================================");
 
             Crate crate = CrateBuilder.get()
                     .setId(keyAndCrateID)
@@ -61,10 +61,11 @@ public class DefaultCrateRenderer implements CrateRenderer {
                     .setEntityModel(entityModel)
                     .setAnimation(animation)
                     .build();
+
             cache.add(keyAndCrateID, crate);
             cache.addKeys(keyAndCrateID);
             cratesAmount++;
         }
-        PluginLogger.getGlobal().info("Quantidade de caixas e keys carregadas: " + cratesAmount);
+        PluginLogger.getGlobal().info(ChatColor.GREEN +"Quantidade de caixas e keys carregadas: " + cratesAmount);
     }
 }
