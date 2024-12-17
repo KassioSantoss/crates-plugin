@@ -36,20 +36,20 @@ public class DefaultCrateService implements CrateService {
         ModeledEntity modeledEntity = ModelEngineAPI.createModeledEntity(box);
         ActiveModel activeModel = ModelEngineAPI.createActiveModel(crate.entityModel());
 
+        if (activeModel == null) {
+            throw new RuntimeException("Não foi encontrado nenhum modelo com esse id de caixa: " + crate.id());
+        }
+
         double deltaX = player.getLocation().getX() - centeredLocation.getX();
         double deltaZ = player.getLocation().getZ() - centeredLocation.getZ();
         float yaw = (float) Math.toDegrees(Math.atan2(-deltaX, deltaZ));
         yaw -= 180.0f;
-        box.setRotation(yaw, 0.0f);
-
-        if (activeModel == null) {
-            throw new RuntimeException("Não foi encontrado nenhum modelo com esse id de caixa: " + crate.id());
-        }
 
         box.setVisible(false);
         box.setInvulnerable(true);
         box.setCanMove(false);
         box.setSmall(false);
+        box.setRotation(yaw, 0.0f);
         activeModel.setHitboxScale(1);
         modeledEntity.addModel(activeModel, true);
         crateCache.addCrateByLocation(crateLocation, crate);
@@ -67,7 +67,6 @@ public class DefaultCrateService implements CrateService {
         if (activeModels.isEmpty()) return;
 
         boolean keyItem = crateManager.isKeyItem(item);
-
         if (!keyItem) return;
 
         Crate crate = crateManager.getCrateFromKey(item);
@@ -75,7 +74,6 @@ public class DefaultCrateService implements CrateService {
         Crate crateTarget = crateCache.getCrateByLocation(crateLocation);
 
         if (crate == null || crateTarget == null) return;
-
         if (!crate.id().equals(crateTarget.id())) return;
 
         ActiveModel activeModel = activeModels.get(crate.entityModel());
