@@ -18,7 +18,7 @@ public class CrateBuilder {
     private String animation = "default_animation";
     private final List<String> rewards = new ArrayList<>();
 
-    public static CrateBuilder get() {
+    public static CrateBuilder builder() {
         return new CrateBuilder();
     }
 
