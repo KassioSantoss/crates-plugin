@@ -1,5 +1,6 @@
 package brcomkassin.crates.services;
 
+import brcomkassin.CrateLocation;
 import brcomkassin.crates.Crate;
 import brcomkassin.crates.cache.CrateCache;
 import brcomkassin.crates.manager.CrateManager;
@@ -26,12 +27,20 @@ public class DefaultCrateService implements CrateService {
 
     @Override
     public void summonCrate(Player player, Location location, Crate crate) {
-        if (crateCache.getLocationCrateMap().containsKey(location.getBlock().getLocation().add(0.5, 0, 0.5))) return;
-
         Location centeredLocation = location.getBlock().getLocation().add(0.5, 0, 0.5);
+        CrateLocation crateLocation = new CrateLocation(centeredLocation.getX(), centeredLocation.getY(), centeredLocation.getZ());
+
+        if (crateCache.getLocationCrateMap().containsKey(crateLocation)) return;
+
         ArmorStand box = centeredLocation.getWorld().spawn(centeredLocation, ArmorStand.class);
         ModeledEntity modeledEntity = ModelEngineAPI.createModeledEntity(box);
         ActiveModel activeModel = ModelEngineAPI.createActiveModel(crate.entityModel());
+
+        double deltaX = player.getLocation().getX() - centeredLocation.getX();
+        double deltaZ = player.getLocation().getZ() - centeredLocation.getZ();
+        float yaw = (float) Math.toDegrees(Math.atan2(-deltaX, deltaZ));
+        yaw -= 180.0f;
+        box.setRotation(yaw, 0.0f);
 
         if (activeModel == null) {
             throw new RuntimeException("Não foi encontrado nenhum modelo com esse id de caixa: " + crate.id());
@@ -43,8 +52,7 @@ public class DefaultCrateService implements CrateService {
         box.setSmall(false);
         activeModel.setHitboxScale(1);
         modeledEntity.addModel(activeModel, true);
-
-        crateCache.addCrateByLocation(centeredLocation, crate);
+        crateCache.addCrateByLocation(crateLocation, crate);
         player.sendMessage("Caixa spawnada com sucesso!");
     }
 
@@ -63,7 +71,8 @@ public class DefaultCrateService implements CrateService {
         if (!keyItem) return;
 
         Crate crate = crateManager.getCrateFromKey(item);
-        Crate crateTarget = crateCache.getCrateByLocation(entity.getLocation());
+        CrateLocation crateLocation = new CrateLocation(entity.getLocation().getX(), entity.getLocation().getY(), entity.getLocation().getZ());
+        Crate crateTarget = crateCache.getCrateByLocation(crateLocation);
 
         if (crate == null || crateTarget == null) return;
 

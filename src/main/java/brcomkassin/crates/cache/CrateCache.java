@@ -1,8 +1,8 @@
 package brcomkassin.crates.cache;
 
+import brcomkassin.CrateLocation;
 import brcomkassin.crates.Crate;
 import org.bukkit.Location;
-
 import java.util.List;
 import java.util.Map;
 
@@ -22,9 +22,9 @@ public interface CrateCache {
 
     List<String> getKeys();
 
-    Crate getCrateByLocation(Location location);
+    Crate getCrateByLocation(CrateLocation location);
 
-    void addCrateByLocation(Location location, Crate crate);
+    void addCrateByLocation(CrateLocation location, Crate crate);
 
-    Map<Location, Crate> getLocationCrateMap();
+    Map<CrateLocation, Crate> getLocationCrateMap();
 }

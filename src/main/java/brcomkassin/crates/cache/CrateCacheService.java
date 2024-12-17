@@ -1,5 +1,6 @@
 package brcomkassin.crates.cache;
 
+import brcomkassin.CrateLocation;
 import brcomkassin.crates.Crate;
 import org.bukkit.Location;
 import java.util.*;
@@ -8,7 +9,7 @@ public class CrateCacheService implements CrateCache {
 
     private final Map<String, Crate> cache;
     private final Set<String> cratesSet;
-    private final Map<Location, Crate> locationCrateMap;
+    private final Map<CrateLocation, Crate> locationCrateMap;
 
     public CrateCacheService() {
         this.cache = new HashMap<>();
@@ -53,17 +54,17 @@ public class CrateCacheService implements CrateCache {
     }
 
     @Override
-    public Crate getCrateByLocation(Location location) {
+    public Crate getCrateByLocation(CrateLocation location) {
         return locationCrateMap.get(location);
     }
 
     @Override
-    public void addCrateByLocation(Location location, Crate crate) {
+    public void addCrateByLocation(CrateLocation location, Crate crate) {
         locationCrateMap.put(location, crate);
     }
 
     @Override
-    public Map<Location, Crate> getLocationCrateMap() {
+    public Map<CrateLocation, Crate> getLocationCrateMap() {
         return locationCrateMap;
     }
 
