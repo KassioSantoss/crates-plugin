@@ -3,7 +3,7 @@ package brcomkassin.crates.renderer;
 import brcomkassin.crates.Crate;
 import brcomkassin.crates.builder.CrateBuilder;
 import brcomkassin.crates.cache.CrateCache;
-import org.bukkit.ChatColor;
+
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginLogger;

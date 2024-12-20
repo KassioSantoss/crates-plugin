@@ -3,7 +3,11 @@ package brcomkassin.crates.builder;
 import brcomkassin.crates.Crate;
 import brcomkassin.crates.CrateMaterial;
 import brcomkassin.utils.ItemBuilder;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
+
 import java.util.ArrayList;
 import java.util.List;
 

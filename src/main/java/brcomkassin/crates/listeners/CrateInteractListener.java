@@ -21,7 +21,7 @@ public class CrateInteractListener implements Listener {
         Player player = event.getPlayer();
         Entity entity = event.getRightClicked();
         ItemStack itemInMainHand = player.getInventory().getItemInMainHand();
-        crateService.openCrate(entity, itemInMainHand);
+        crateService.openCrate(player,entity, itemInMainHand);
     }
 
 }

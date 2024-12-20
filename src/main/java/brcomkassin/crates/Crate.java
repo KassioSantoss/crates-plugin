@@ -1,5 +1,7 @@
 package brcomkassin.crates;
 
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
@@ -14,5 +16,6 @@ public record Crate(
         String animation,
         List<String> rewards,
         ItemStack keyItem,
-        ItemStack crateItem) {
+        ItemStack crateItem
+        ) {
 }

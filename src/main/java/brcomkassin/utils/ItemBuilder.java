@@ -109,7 +109,7 @@ public final class ItemBuilder {
         return consumeMeta(meta -> meta.setCustomModelData(id));
     }
 
-    public ItemBuilder getCustomModelData(int id) {
+    public ItemBuilder getCustomModelData() {
         return consumeMeta(ItemMeta::getCustomModelData);
     }
 

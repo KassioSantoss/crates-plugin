@@ -4,3 +4,4 @@ main: brcomkassin.CratesPlugin
 api-version: '1.20'
 commands:
   crate:
+  display:

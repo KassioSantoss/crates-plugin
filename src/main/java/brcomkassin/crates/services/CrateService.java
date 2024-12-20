@@ -9,6 +9,6 @@ import org.bukkit.inventory.ItemStack;
 public interface CrateService {
 
      void summonCrate(Player player, Location location, Crate crate);
-     void openCrate(Entity entity, ItemStack item);
+     void openCrate(Player player,Entity entity, ItemStack item);
 
 }
