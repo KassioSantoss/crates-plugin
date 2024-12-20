@@ -21,8 +21,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Transformation;
-import org.bukkit.util.Vector;
-
 import java.util.Map;
 
 public class DefaultCrateService implements CrateService {
@@ -44,7 +42,7 @@ public class DefaultCrateService implements CrateService {
 
         ArmorStand box = centeredLocation.getWorld().spawn(centeredLocation, ArmorStand.class);
         ModeledEntity modeledEntity = ModelEngineAPI.createModeledEntity(box);
-        ActiveModel activeModel = ModelEngineAPI.createActiveModel(crate.entityModel());
+        ActiveModel activeModel = ModelEngineAPI.createActiveModel(crate.baseEntityModel());
 
         if (activeModel == null) {
             throw new RuntimeException("Não foi encontrado nenhum modelo com esse id de caixa: " + crate.id());
@@ -86,9 +84,9 @@ public class DefaultCrateService implements CrateService {
         if (crate == null || crateTarget == null) return;
         if (!crate.id().equals(crateTarget.id())) return;
 
-        ActiveModel activeModel = activeModels.get(crate.entityModel());
+        ActiveModel activeModel = activeModels.get(crate.baseEntityModel());
         AnimationHandler animationHandler = activeModel.getAnimationHandler();
-        animationHandler.playAnimation("open", 0.3, 0.3, 1, true);
+        animationHandler.playAnimation(crate.animation(), 0.3, 0.3, 1, true);
         ItemStack itemStack = new ItemStack(Material.DIAMOND_SWORD);
         animReward(player, entity, item);
         player.sendMessage("Caixa aberta com sucesso!");

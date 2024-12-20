@@ -1,33 +1,29 @@
 package brcomkassin.crates.builder;
 
 import brcomkassin.crates.Crate;
+import brcomkassin.crates.CrateKey;
 import brcomkassin.crates.CrateMaterial;
 import brcomkassin.utils.ItemBuilder;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class CrateBuilder {
 
-    private String id;
+    private CrateKey crateKey = null;
+    private String namespace;
     private String crateDisplayName = "Default Crate Name";
     private int crateCustomModelData = 0;
-    private String keyDisplayName = "Default Key Name";
-    private int keyCustomModelData = 0;
-    private String entityModel = "default_entity_model";
-    private String animation = "default_animation";
+    private String baseEntityModel = "crate_example";
+    private String animation = "open";
     private final List<String> rewards = new ArrayList<>();
 
     public static CrateBuilder builder() {
         return new CrateBuilder();
     }
 
-    public CrateBuilder setId(String id) {
-        this.id = id;
+    public CrateBuilder setId(String namespace) {
+        this.namespace = namespace;
         return this;
     }
 
@@ -41,18 +37,8 @@ public class CrateBuilder {
         return this;
     }
 
-    public CrateBuilder setKeyDisplayName(String keyDisplayName) {
-        this.keyDisplayName = keyDisplayName;
-        return this;
-    }
-
-    public CrateBuilder setKeyCustomModelData(int keyCustomModelData) {
-        this.keyCustomModelData = keyCustomModelData;
-        return this;
-    }
-
-    public CrateBuilder setEntityModel(String entityModel) {
-        this.entityModel = entityModel;
+    public CrateBuilder setBaseEntityModel(String baseEntityModel) {
+        this.baseEntityModel = baseEntityModel;
         return this;
     }
 
@@ -66,33 +52,39 @@ public class CrateBuilder {
         return this;
     }
 
+    public CrateBuilder setCrateKey(String keyDisplayName, int keyCustomModelData, String namespace) {
+        ItemStack keyItem = ItemBuilder.of(CrateMaterial.DEFAULT_KEY_MATERIAL.getMaterial())
+                .setName(keyDisplayName)
+                .setCustomModelData(keyCustomModelData)
+                .setItemMetaData(namespace)
+                .build();
+        this.crateKey = new CrateKey(keyDisplayName, keyCustomModelData, namespace, keyItem);
+        return this;
+    }
+
     public Crate build() {
-        if (id == null || id.isEmpty()) {
-            throw new IllegalStateException("O ID da caixa não pode ser nulo ou vazio.");
+        if (namespace == null || namespace.isEmpty()) {
+            throw new IllegalStateException("O NameSpacedKey da caixa não pode ser nulo ou vazio.");
+        }
+        if (crateKey == null) {
+            throw new IllegalStateException("A key da caixa não pode ser nulo ou vazio.");
         }
 
         ItemStack crateItem = ItemBuilder.of(CrateMaterial.DEFAULT_CRATE_MATERIAL.getMaterial())
                 .setName(crateDisplayName)
                 .setCustomModelData(crateCustomModelData)
-                .setItemMetaData(id)
-                .build();
-        ItemStack keyItem = ItemBuilder.of(CrateMaterial.DEFAULT_KEY_MATERIAL.getMaterial())
-                .setName(keyDisplayName)
-                .setCustomModelData(keyCustomModelData)
-                .setItemMetaData(id)
+                .setItemMetaData(namespace)
                 .build();
 
         return new Crate(
-                id,
+                crateKey,
+                namespace,
                 crateDisplayName,
                 crateCustomModelData,
-                keyDisplayName,
-                keyCustomModelData,
-                entityModel,
+                baseEntityModel,
                 animation,
-                new ArrayList<>(rewards),
-                keyItem,
-                crateItem
+                crateItem,
+                new ArrayList<>(rewards)
         );
     }
 }

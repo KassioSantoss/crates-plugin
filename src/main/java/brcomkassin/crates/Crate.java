@@ -1,21 +1,18 @@
 package brcomkassin.crates;
 
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
 public record Crate(
+        CrateKey key,
         String id,
         String crateDisplayName,
         int crateCustomModelData,
-        String keyDisplayName,
-        int keyCustomModelData,
-        String entityModel,
+        String baseEntityModel,
         String animation,
-        List<String> rewards,
-        ItemStack keyItem,
-        ItemStack crateItem
-        ) {
+        ItemStack crateItem,
+        List<String> rewards
+) {
 }

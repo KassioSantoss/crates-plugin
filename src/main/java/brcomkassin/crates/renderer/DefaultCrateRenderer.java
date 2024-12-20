@@ -3,7 +3,6 @@ package brcomkassin.crates.renderer;
 import brcomkassin.crates.Crate;
 import brcomkassin.crates.builder.CrateBuilder;
 import brcomkassin.crates.cache.CrateCache;
-
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginLogger;
@@ -11,10 +10,10 @@ import java.util.List;
 
 public class DefaultCrateRenderer implements CrateRenderer {
 
-    private final CrateCache cache;
+    private final CrateCache crateCache;
 
-    public DefaultCrateRenderer(CrateCache cache) {
-        this.cache = cache;
+    public DefaultCrateRenderer(CrateCache crateCache) {
+        this.crateCache = crateCache;
     }
 
     @Override
@@ -32,38 +31,37 @@ public class DefaultCrateRenderer implements CrateRenderer {
         String PATH = "crates.";
 
         for (String crateID : crates.getKeys(false)) {
-            String keyAndCrateID = config.getString(PATH + crateID + ".key_crate_id", "id_default");
+            String namespace = config.getString(PATH + crateID + ".namespace", crateID);
             String crateDisplayName = config.getString(PATH + crateID + ".display_name", "Caixa Sem Nome");
             int crateCustomModelData = config.getInt(PATH + crateID + ".item_model.custom_model_data", 0);
             String keyDisplayName = config.getString(PATH + crateID + ".key_item.display_name", "Chave Sem Nome");
             int keyCustomModelData = config.getInt(PATH + crateID + ".key_item.custom_model_data", 0);
-            String entityModel = config.getString(PATH + crateID + ".entity_model.model_id", "default_model");
-            String animation = config.getString(PATH + crateID + ".entity_model.animation", "default_animation");
+            String baseEntityModel = config.getString(PATH + crateID + ".base_entity_model", "crate_example");
+            String animation = config.getString(PATH + crateID + ".entity_model.animation", "open");
             List<String> rewards = config.getStringList(PATH + crateID + ".rewards");
 
             PluginLogger.getGlobal().info("\u001B[32m============================================================================================================");
-            PluginLogger.getGlobal().info("\u001B[36mID: " + crateID + "\u001B[37m -> keyAndCrateID: " + keyAndCrateID);
+            PluginLogger.getGlobal().info("\u001B[36mID: " + crateID + "\u001B[37m -> namespace: " + namespace);
             PluginLogger.getGlobal().info("\u001B[36mID: " + crateID + "\u001B[37m -> crateDisplayName: " + crateDisplayName);
             PluginLogger.getGlobal().info("\u001B[36mID: " + crateID + "\u001B[37m -> crateCustomModelData: " + crateCustomModelData);
             PluginLogger.getGlobal().info("\u001B[36mID: " + crateID + "\u001B[37m -> keyDisplayName: " + keyDisplayName);
             PluginLogger.getGlobal().info("\u001B[36mID: " + crateID + "\u001B[37m -> keyCustomModelData: " + keyCustomModelData);
-            PluginLogger.getGlobal().info("\u001B[36mID: " + crateID + "\u001B[37m -> entityModel: " + entityModel);
+            PluginLogger.getGlobal().info("\u001B[36mID: " + crateID + "\u001B[37m -> baseEntityModel: " + baseEntityModel);
             PluginLogger.getGlobal().info("\u001B[36mID: " + crateID + "\u001B[37m -> animation: " + animation);
             PluginLogger.getGlobal().info("\u001B[36mID: " + crateID + "\u001B[37m -> rewards: " + rewards);
             PluginLogger.getGlobal().info("\u001B[32m============================================================================================================\u001B[0m");
 
             Crate crate = CrateBuilder.builder()
-                    .setId(keyAndCrateID)
+                    .setCrateKey(keyDisplayName, keyCustomModelData, namespace)
+                    .setId(namespace)
                     .setCrateDisplayName(crateDisplayName)
-                    .setKeyDisplayName(keyDisplayName)
                     .setCrateCustomModelData(crateCustomModelData)
-                    .setKeyCustomModelData(keyCustomModelData)
-                    .setEntityModel(entityModel)
+                    .setBaseEntityModel(baseEntityModel)
                     .setAnimation(animation)
                     .build();
 
-            cache.add(keyAndCrateID, crate);
-            cache.addKeys(keyAndCrateID);
+            crateCache.add(namespace, crate);
+            crateCache.addKeys(namespace);
             cratesAmount++;
         }
         PluginLogger.getGlobal().info("Quantidade de caixas e keys carregadas: " + cratesAmount);

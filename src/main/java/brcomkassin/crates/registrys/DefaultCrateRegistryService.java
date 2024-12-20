@@ -1,7 +1,6 @@
 package brcomkassin.crates.registrys;
 
 import brcomkassin.commands.CrateCommand;
-import brcomkassin.commands.ItemDisplayCommand;
 import brcomkassin.crates.cache.CrateCache;
 import brcomkassin.crates.cache.CrateCacheService;
 import brcomkassin.crates.listeners.CrateInteractListener;
@@ -40,7 +39,6 @@ public class DefaultCrateRegistryService implements CrateRegistryService {
         plugin.getServer().getPluginManager().registerEvents(crateInteractListener, plugin);
         plugin.getServer().getPluginManager().registerEvents(cratePlaceListener, plugin);
         plugin.getCommand("crate").setExecutor(crateCommand);
-        plugin.getCommand("display").setExecutor(new ItemDisplayCommand());
         plugin.getLogger().info(ChatColor.GREEN +"DefaultCrateRegistryService carregado!");
     }
 }
