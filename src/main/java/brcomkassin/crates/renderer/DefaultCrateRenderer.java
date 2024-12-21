@@ -33,11 +33,11 @@ public class DefaultCrateRenderer implements CrateRenderer {
         for (String crateID : crates.getKeys(false)) {
             String namespace = config.getString(PATH + crateID + ".namespace", crateID);
             String crateDisplayName = config.getString(PATH + crateID + ".display_name", "Caixa Sem Nome");
-            int crateCustomModelData = config.getInt(PATH + crateID + ".item_model.custom_model_data", 0);
+            int crateCustomModelData = config.getInt(PATH + crateID + ".crate_item_model.custom_model_data", 0);
             String keyDisplayName = config.getString(PATH + crateID + ".key_item.display_name", "Chave Sem Nome");
             int keyCustomModelData = config.getInt(PATH + crateID + ".key_item.custom_model_data", 0);
-            String baseEntityModel = config.getString(PATH + crateID + ".base_entity_model", "crate_example");
-            String animation = config.getString(PATH + crateID + ".entity_model.animation", "open");
+            String baseEntityModel = config.getString(PATH + crateID + ".base_entity_model.model_id", "crate_example");
+            String animation = config.getString(PATH + crateID + ".base_entity_model.animation", "open");
             List<String> rewards = config.getStringList(PATH + crateID + ".rewards");
 
             PluginLogger.getGlobal().info("\u001B[32m============================================================================================================");

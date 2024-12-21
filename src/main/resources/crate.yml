@@ -1,15 +1,15 @@
 crates:
   my_first_crate:
-    key_crate_id: "unique_id"
+    namespace: "unique_id"
     display_name: "&aCaixa de Teste"
-    item_model:
+    crate_item_model:
       custom_model_data: 123
     key_item:
       display_name: "&eChave de Teste"
       custom_model_data: 456
-    entity_model:
+    base_entity_model:
       model_id: "test_model"
-      animation: "open_animation"
+      animation: "open"
     rewards:
       - "give %player% diamond 5"
       - "give %player% gold_ingot 10"
