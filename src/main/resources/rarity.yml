@@ -1,4 +1,4 @@
-crates:
+rarity:
   my_first_crate:
     rewards:
       COMMON:
@@ -7,7 +7,7 @@ crates:
         "reward_id_2"
       SUPER_RARE:
         "reward_id_3"
-      EPIC:
-      MYTHICAL:
-      LEGENDARY:
+      EPIC: []
+      MYTHICAL: [ ]
+      LEGENDARY: []
 

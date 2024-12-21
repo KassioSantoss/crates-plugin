@@ -2,7 +2,10 @@ rewards:
   reward_id_1:
     item_type: DIAMOND_SWORD
     display_name: "&aReward Example"
-    lore: "Lore Example"
+    lore:
+    - "Lore Example"
+    - "Lore Example"
+    - "Lore Example"
     namespace: "unique_id"
     custom_model_data: 123
   reward_id_2:

@@ -56,7 +56,7 @@ public class CrateBuilder {
         ItemStack keyItem = ItemBuilder.of(CrateMaterial.DEFAULT_KEY_MATERIAL.getMaterial())
                 .setName(keyDisplayName)
                 .setCustomModelData(keyCustomModelData)
-                .setItemMetaData(namespace)
+                .setNameSpacedKey(namespace)
                 .build();
         this.crateKey = new CrateKey(keyDisplayName, keyCustomModelData, namespace, keyItem);
         return this;
@@ -73,7 +73,7 @@ public class CrateBuilder {
         ItemStack crateItem = ItemBuilder.of(CrateMaterial.DEFAULT_CRATE_MATERIAL.getMaterial())
                 .setName(crateDisplayName)
                 .setCustomModelData(crateCustomModelData)
-                .setItemMetaData(namespace)
+                .setNameSpacedKey(namespace)
                 .build();
 
         return new Crate(

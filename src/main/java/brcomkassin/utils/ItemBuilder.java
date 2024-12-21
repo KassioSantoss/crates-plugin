@@ -97,7 +97,7 @@ public final class ItemBuilder {
         return consume(item -> item.addUnsafeEnchantment(enchantment, level));
     }
 
-    public ItemBuilder setItemMetaData(String key) {
+    public ItemBuilder setNameSpacedKey(String key) {
         return consumeMeta(meta -> {
             PersistentDataContainer container = meta.getPersistentDataContainer();
             NamespacedKey namespacedKey = new NamespacedKey(CratesPlugin.getInstance(), key);

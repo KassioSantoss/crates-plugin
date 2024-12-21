@@ -34,11 +34,11 @@ public class DefaultCrateRegistryService implements CrateRegistryService {
     }
 
     @Override
-    public void load(FileConfiguration fileConfiguration) {
+    public void registry(FileConfiguration fileConfiguration) {
         crateRenderer.load(fileConfiguration);
         plugin.getServer().getPluginManager().registerEvents(crateInteractListener, plugin);
         plugin.getServer().getPluginManager().registerEvents(cratePlaceListener, plugin);
         plugin.getCommand("crate").setExecutor(crateCommand);
-        plugin.getLogger().info(ChatColor.GREEN +"DefaultCrateRegistryService carregado!");
+        plugin.getLogger().info(ChatColor.GREEN + "DefaultCrateRegistryService carregado!");
     }
 }

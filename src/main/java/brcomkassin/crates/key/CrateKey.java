@@ -1,16 +1,12 @@
 package brcomkassin.crates.key;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.bukkit.inventory.ItemStack;
 
-@Getter
-@Setter
-@AllArgsConstructor
+@Data
 public class CrateKey {
-    private String keyDisplayName;
-    private int keyCustomModelData;
-    private String namespace;
-    private ItemStack item;
+    private final String keyDisplayName;
+    private final int keyCustomModelData;
+    private final String namespace;
+    private final ItemStack item;
 }

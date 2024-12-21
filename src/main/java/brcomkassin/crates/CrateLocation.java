@@ -1,4 +1,4 @@
-package brcomkassin;
+package brcomkassin.crates;
 
 public record CrateLocation(
         double x,

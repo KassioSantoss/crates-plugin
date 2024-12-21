@@ -1,6 +1,6 @@
 package brcomkassin.crates.services;
 
-import brcomkassin.CrateLocation;
+import brcomkassin.crates.CrateLocation;
 import brcomkassin.CratesPlugin;
 import brcomkassin.crates.Crate;
 import brcomkassin.crates.cache.CrateCache;

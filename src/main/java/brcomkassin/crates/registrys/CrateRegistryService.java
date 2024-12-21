@@ -4,6 +4,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 public interface CrateRegistryService {
 
-    void load(FileConfiguration fileConfiguration);
+    void registry(FileConfiguration fileConfiguration);
 
 }

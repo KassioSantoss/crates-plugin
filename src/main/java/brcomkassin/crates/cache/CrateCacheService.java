@@ -1,8 +1,8 @@
 package brcomkassin.crates.cache;
 
-import brcomkassin.CrateLocation;
+import brcomkassin.crates.CrateLocation;
 import brcomkassin.crates.Crate;
-import org.bukkit.Location;
+
 import java.util.*;
 
 public class CrateCacheService implements CrateCache {
