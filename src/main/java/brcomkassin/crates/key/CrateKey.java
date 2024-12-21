@@ -1,4 +1,4 @@
-package brcomkassin.crates;
+package brcomkassin.crates.key;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

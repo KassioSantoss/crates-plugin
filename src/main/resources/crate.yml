@@ -10,6 +10,3 @@ crates:
     base_entity_model:
       model_id: "test_model"
       animation: "open"
-    rewards:
-      - "give %player% diamond 5"
-      - "give %player% gold_ingot 10"

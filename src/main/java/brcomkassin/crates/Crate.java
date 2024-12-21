@@ -1,6 +1,6 @@
 package brcomkassin.crates;
 
-import org.bukkit.entity.Entity;
+import brcomkassin.crates.key.CrateKey;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;

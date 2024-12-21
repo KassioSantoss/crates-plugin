@@ -1,7 +1,7 @@
 package brcomkassin.crates.builder;
 
 import brcomkassin.crates.Crate;
-import brcomkassin.crates.CrateKey;
+import brcomkassin.crates.key.CrateKey;
 import brcomkassin.crates.CrateMaterial;
 import brcomkassin.utils.ItemBuilder;
 import org.bukkit.inventory.ItemStack;
