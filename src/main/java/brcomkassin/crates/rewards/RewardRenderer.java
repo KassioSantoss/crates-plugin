@@ -4,6 +4,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 public interface RewardRenderer {
 
-    void renderer(FileConfiguration fileConfiguration;
+    void renderer(FileConfiguration fileConfiguration);
 
 }
