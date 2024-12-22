@@ -16,6 +16,5 @@ public class Reward {
     private List<String> lore;
     private String nameSpace;
     private int customModelData;
-    private RewardsRarity rarity;
 
 }

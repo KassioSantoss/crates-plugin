@@ -55,7 +55,7 @@ public class DefaultRewardRenderer implements RewardRenderer {
                     .setCustomModelData(customModelData)
                     .build();
 
-            Reward reward = new Reward(rewardItem, displayName, lore, namespace, customModelData, RewardsRarity.COMMON);
+            Reward reward = new Reward(rewardItem, displayName, lore, namespace, customModelData);
             rewardCache.add(rewardsID, reward);
             rewardCache.addKeys(rewardsID);
         }
@@ -98,7 +98,6 @@ public class DefaultRewardRenderer implements RewardRenderer {
                 for (String rewardID : rewardIDs) {
                     Reward cachedReward = rewardCache.getReward(rewardID);
                     Objects.requireNonNull(cachedReward, "Recompensa não encontrada no cache: " + rewardID);
-                    cachedReward.setRarity(rewardsRarity);
                     rewardList.add(cachedReward);
                 }
                 ItemRarity itemRarity = new ItemRarity(rewardsRarity, rewardList);
