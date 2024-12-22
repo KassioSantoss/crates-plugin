@@ -7,9 +7,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginLogger;
 
-import java.util.List;
-import java.util.logging.Logger;
-
 public class DefaultCrateRenderer implements CrateRenderer {
 
     private final CrateCache crateCache;
@@ -26,7 +23,7 @@ public class DefaultCrateRenderer implements CrateRenderer {
         ConfigurationSection crates = config.getConfigurationSection("crates");
 
         if (crates == null) {
-            throw new IllegalArgumentException("Configuração inválida! Seção 'crates' não encontrada."); // depois arrumar exceçoes
+            throw new IllegalArgumentException("Configuração inválida! Seção 'crates' não encontrada.");
         }
 
         int cratesAmount = 0;
@@ -40,18 +37,18 @@ public class DefaultCrateRenderer implements CrateRenderer {
             int keyCustomModelData = config.getInt(PATH + crateID + ".key_item.custom_model_data", 0);
             String baseEntityModel = config.getString(PATH + crateID + ".base_entity_model.model_id", "crate_example");
             String animation = config.getString(PATH + crateID + ".base_entity_model.animation", "open");
-            List<String> rewards = config.getStringList(PATH + crateID + ".rewards");
 
-            PluginLogger.getGlobal().info("\u001B[32m============================================================================================================");
-            PluginLogger.getGlobal().info("\u001B[36mID: " + crateID + "\u001B[37m -> namespace: " + namespace);
-            PluginLogger.getGlobal().info("\u001B[36mID: " + crateID + "\u001B[37m -> crateDisplayName: " + crateDisplayName);
-            PluginLogger.getGlobal().info("\u001B[36mID: " + crateID + "\u001B[37m -> crateCustomModelData: " + crateCustomModelData);
-            PluginLogger.getGlobal().info("\u001B[36mID: " + crateID + "\u001B[37m -> keyDisplayName: " + keyDisplayName);
-            PluginLogger.getGlobal().info("\u001B[36mID: " + crateID + "\u001B[37m -> keyCustomModelData: " + keyCustomModelData);
-            PluginLogger.getGlobal().info("\u001B[36mID: " + crateID + "\u001B[37m -> baseEntityModel: " + baseEntityModel);
-            PluginLogger.getGlobal().info("\u001B[36mID: " + crateID + "\u001B[37m -> animation: " + animation);
-            PluginLogger.getGlobal().info("\u001B[36mID: " + crateID + "\u001B[37m -> rewards: " + rewards);
-            PluginLogger.getGlobal().info("\u001B[32m============================================================================================================\u001B[0m");
+            showRenderedCrates(
+                    "\u001B[32m======================================================================================",
+                    "\u001B[36mID: " + crateID + "\u001B[37m -> namespace: " + namespace,
+                    "\u001B[36mID: " + crateID + "\u001B[37m -> crateDisplayName: " + crateDisplayName,
+                    "\u001B[36mID: " + crateID + "\u001B[37m -> crateCustomModelData: " + crateCustomModelData,
+                    "\u001B[36mID: " + crateID + "\u001B[37m -> keyDisplayName: " + keyDisplayName,
+                    "\u001B[36mID: " + crateID + "\u001B[37m -> keyCustomModelData: " + keyCustomModelData,
+                    "\u001B[36mID: " + crateID + "\u001B[37m -> baseEntityModel: " + baseEntityModel,
+                    "\u001B[36mID: " + crateID + "\u001B[37m -> animation: " + animation,
+                    "\u001B[32m======================================================================================\u001B[0m"
+            );
 
             Crate crate = CrateBuilder.builder()
                     .setCrateKey(keyDisplayName, keyCustomModelData, namespace)
@@ -66,9 +63,15 @@ public class DefaultCrateRenderer implements CrateRenderer {
             crateCache.add(namespace, crate);
             crateCache.addKeys(crateID);
             crateCache.addCrateById(crateID, crate);
-            Logger.getGlobal().info("cache: " + crateCache.getCrateById(crateID));
             cratesAmount++;
         }
         PluginLogger.getGlobal().info("Quantidade de caixas e keys carregadas: " + cratesAmount);
     }
+
+    public void showRenderedCrates(String... strings) {
+        for (String string : strings) {
+            PluginLogger.getGlobal().info(string);
+        }
+    }
+
 }

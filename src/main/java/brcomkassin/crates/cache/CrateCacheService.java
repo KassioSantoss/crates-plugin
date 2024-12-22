@@ -40,11 +40,6 @@ public class CrateCacheService implements CrateCache {
     }
 
     @Override
-    public String getCrateId(String key) {
-        return cache.get(key).nameSpace();
-    }
-
-    @Override
     public void addKeys(String key) {
         cratesSet.add(key);
     }

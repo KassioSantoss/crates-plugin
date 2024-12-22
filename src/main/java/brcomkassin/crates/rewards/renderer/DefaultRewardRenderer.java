@@ -1,7 +1,9 @@
-package brcomkassin.crates.rewards;
+package brcomkassin.crates.rewards.renderer;
 
 import brcomkassin.crates.Crate;
 import brcomkassin.crates.cache.CrateCache;
+import brcomkassin.crates.rewards.rarity.ItemRarity;
+import brcomkassin.crates.rewards.Reward;
 import brcomkassin.crates.rewards.cache.RewardCache;
 import brcomkassin.crates.rewards.rarity.RewardsRarity;
 import brcomkassin.utils.ItemBuilder;
@@ -9,11 +11,9 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.PluginLogger;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 public class DefaultRewardRenderer implements RewardRenderer {
@@ -58,9 +58,6 @@ public class DefaultRewardRenderer implements RewardRenderer {
             Reward reward = new Reward(rewardItem, displayName, lore, namespace, customModelData, RewardsRarity.COMMON);
             rewardCache.add(rewardsID, reward);
             rewardCache.addKeys(rewardsID);
-
-            Logger.getGlobal().info(rewardCache.getReward(rewardsID).getDisplayName());
-            Logger.getGlobal().info(rewardCache.getKeys().toString());
         }
         loadItemsRarity(rarityConfiguration);
     }
@@ -74,44 +71,40 @@ public class DefaultRewardRenderer implements RewardRenderer {
             throw new IllegalArgumentException("Configuração inválida! Seção 'rarity' não encontrada.");
         }
 
-        String PATH = "rarity.";
         for (String crateID : raritySection.getKeys(false)) {
             Crate crate = crateCache.getCrateById(crateID);
             Logger.getGlobal().info(crate.nameSpace());
-            Logger.getGlobal().info(crate.nameSpace());
-            String REWARD_PATH = PATH + crateID + ".rewards";
+
+            String REWARD_PATH = "rarity." + crateID + ".rewards";
             ConfigurationSection rewardsSection = fileConfiguration.getConfigurationSection(REWARD_PATH);
 
             if (rewardsSection == null) continue;
+
+            List<ItemRarity> itemRarities = new ArrayList<>();
 
             for (String rarityKey : rewardsSection.getKeys(false)) {
                 RewardsRarity rewardsRarity;
                 try {
                     rewardsRarity = RewardsRarity.getByString(rarityKey);
                 } catch (IllegalArgumentException e) {
-                    PluginLogger.getGlobal().info("Raridade inválida encontrada: " + rarityKey);
+                    Logger.getGlobal().info("Raridade inválida encontrada: " + rarityKey);
                     continue;
                 }
 
-                List<String> rewardIDs = fileConfiguration.getStringList(REWARD_PATH + "." + rarityKey);
+                String rewardPath = REWARD_PATH + "." + rarityKey;
+                List<String> rewardIDs = fileConfiguration.getStringList(rewardPath);
                 List<Reward> rewardList = new ArrayList<>();
-                List<ItemRarity> itemRarities = new ArrayList<>();
 
                 for (String rewardID : rewardIDs) {
                     Reward cachedReward = rewardCache.getReward(rewardID);
-                    if (cachedReward == null) {
-                        PluginLogger.getGlobal().info("Recompensa não encontrada no cache: " + rewardID);
-                        continue;
-                    }
+                    Objects.requireNonNull(cachedReward, "Recompensa não encontrada no cache: " + rewardID);
                     cachedReward.setRarity(rewardsRarity);
                     rewardList.add(cachedReward);
                 }
-                itemRarities.add(new ItemRarity(rewardsRarity, rewardList));
-                rewardCache.addItemRarity(crate.id(), itemRarities);
-                Logger.getGlobal().info("========================================");
-                Logger.getGlobal().info("getItemRarities -> " + rewardCache.getItemRarities(crate.id()).toString());
-                Logger.getGlobal().info("========================================");
+                ItemRarity itemRarity = new ItemRarity(rewardsRarity, rewardList);
+                itemRarities.add(itemRarity);
             }
+            rewardCache.addItemRarity(crate.id(), itemRarities);
         }
     }
 }

@@ -16,8 +16,6 @@ public interface CrateCache {
 
     Crate getCrate(String key);
 
-    String getCrateId(String key);
-
     void addKeys(String key);
 
     List<String> getKeys();

@@ -1,4 +1,4 @@
-package brcomkassin.crates.rewards;
+package brcomkassin.crates.rewards.animation;
 
 import brcomkassin.CratesPlugin;
 import brcomkassin.utils.ItemBuilder;

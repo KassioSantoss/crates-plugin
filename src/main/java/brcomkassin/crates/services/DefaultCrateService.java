@@ -6,7 +6,7 @@ import brcomkassin.crates.cache.CrateCache;
 import brcomkassin.crates.manager.CrateManager;
 import brcomkassin.crates.rewards.Reward;
 import brcomkassin.crates.rewards.RewardCalculator;
-import brcomkassin.crates.rewards.RewardHandlerAnimation;
+import brcomkassin.crates.rewards.animation.RewardHandlerAnimation;
 import brcomkassin.crates.rewards.cache.RewardCache;
 import com.ticxo.modelengine.api.ModelEngineAPI;
 import com.ticxo.modelengine.api.animation.handler.AnimationHandler;
@@ -88,10 +88,6 @@ public class DefaultCrateService implements CrateService {
         ActiveModel activeModel = activeModels.get(crate.baseEntityModel());
         AnimationHandler animationHandler = activeModel.getAnimationHandler();
         animationHandler.playAnimation(crate.animation(), 0.3, 0.3, 1, true);
-
-        player.sendMessage("id da caixa: " + crate.id());
-        player.sendMessage("cache da caixa: " + rewardCache.getReward(crate.id()));
-        player.sendMessage("cache da caixa 2: " + crateCache.getCrateById(crate.id()));
 
         Reward reward = rewardCalculator.calculateReward(crate.id(), rewardCache);
         RewardHandlerAnimation.animReward(entity, reward.getItem());

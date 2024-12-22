@@ -1,6 +1,6 @@
-package brcomkassin.crates.rewards;
+package brcomkassin.crates.rewards.rarity;
 
-import brcomkassin.crates.rewards.rarity.RewardsRarity;
+import brcomkassin.crates.rewards.Reward;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import java.util.List;

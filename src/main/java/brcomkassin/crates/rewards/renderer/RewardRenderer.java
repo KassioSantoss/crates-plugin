@@ -1,4 +1,4 @@
-package brcomkassin.crates.rewards;
+package brcomkassin.crates.rewards.renderer;
 
 import org.bukkit.configuration.file.FileConfiguration;
 

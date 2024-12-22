@@ -1,13 +1,15 @@
 rarity:
   my_first_crate:
     rewards:
-      COMMON:
-        "reward_id_1"
-      RARE:
-        "reward_id_2"
-      SUPER_RARE:
-        "reward_id_3"
-      EPIC: []
-      MYTHICAL: [ ]
-      LEGENDARY: []
-
+      common:
+        - "reward_id_1"
+      rare:
+        - "reward_id_2"
+      super_rare:
+        - "reward_id_3"
+      epic:
+        - "reward_id_3"
+      mythical:
+        - "reward_id_3"
+      legendary:
+        - "reward_id_3"

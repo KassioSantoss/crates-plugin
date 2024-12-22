@@ -1,29 +1,19 @@
 package brcomkassin.crates.rewards.cache;
 
-import brcomkassin.crates.Crate;
-import brcomkassin.crates.rewards.ItemRarity;
+import brcomkassin.crates.rewards.rarity.ItemRarity;
 import brcomkassin.crates.rewards.Reward;
-import brcomkassin.crates.rewards.rarity.RewardsRarity;
-
 import java.util.*;
 
 public class RewardCacheService implements RewardCache {
 
-    private final Map<Reward, RewardsRarity> rarityMap;
     private final Map<String, List<ItemRarity>> itemRarityMap;
     private final Map<String, Reward> idRewardMap;
     private final Set<String> keys;
 
     public RewardCacheService() {
-        this.rarityMap = new HashMap<>();
         this.itemRarityMap = new HashMap<>();
         this.idRewardMap = new HashMap<>();
         this.keys = new HashSet<>();
-    }
-
-    @Override
-    public void add(Reward reward, RewardsRarity rarity) {
-        rarityMap.put(reward, rarity);
     }
 
     @Override
@@ -39,11 +29,6 @@ public class RewardCacheService implements RewardCache {
     @Override
     public List<String> getKeys() {
         return new ArrayList<>(keys);
-    }
-
-    @Override
-    public RewardsRarity getRarity(Reward reward) {
-        return rarityMap.get(reward);
     }
 
     @Override
