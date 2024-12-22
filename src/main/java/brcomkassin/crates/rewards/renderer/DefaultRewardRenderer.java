@@ -36,9 +36,7 @@ public class DefaultRewardRenderer implements RewardRenderer {
             throw new IllegalArgumentException("Configuração inválida! Seção 'rewards' não encontrada.");
         }
         ConfigurationSection rewardsSection = itemRarityConfiguration.getConfigurationSection("rewards");
-        if (rewardsSection == null) {
-            throw new IllegalArgumentException("Configuração inválida! rewards 'crates' não encontrada.");
-        }
+        Objects.requireNonNull(rewardsSection, "Invalid Configuration Section 'rewards' not found.");
 
         String PATH = "rewards.";
         for (String rewardsID : rewardsSection.getKeys(false)) {
@@ -55,7 +53,7 @@ public class DefaultRewardRenderer implements RewardRenderer {
                     .setCustomModelData(customModelData)
                     .build();
 
-            Reward reward = new Reward(rewardItem, displayName, lore, namespace, customModelData);
+            Reward reward = Reward.of(rewardItem, displayName, lore, namespace, customModelData);
             rewardCache.add(rewardsID, reward);
             rewardCache.addKeys(rewardsID);
         }
@@ -67,9 +65,7 @@ public class DefaultRewardRenderer implements RewardRenderer {
             throw new IllegalArgumentException("Configuração inválida! Seção 'rarity' não encontrada.");
         }
         ConfigurationSection raritySection = fileConfiguration.getConfigurationSection("rarity");
-        if (raritySection == null) {
-            throw new IllegalArgumentException("Configuração inválida! Seção 'rarity' não encontrada.");
-        }
+        Objects.requireNonNull(raritySection, "Invalid Configuration Section 'rarity' not found.");
 
         for (String crateID : raritySection.getKeys(false)) {
             Crate crate = crateCache.getCrateById(crateID);
@@ -100,7 +96,7 @@ public class DefaultRewardRenderer implements RewardRenderer {
                     Objects.requireNonNull(cachedReward, "Recompensa não encontrada no cache: " + rewardID);
                     rewardList.add(cachedReward);
                 }
-                ItemRarity itemRarity = new ItemRarity(rewardsRarity, rewardList);
+                ItemRarity itemRarity = ItemRarity.of(rewardsRarity, rewardList);
                 itemRarities.add(itemRarity);
             }
             rewardCache.addItemRarity(crate.id(), itemRarities);

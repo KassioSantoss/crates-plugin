@@ -35,6 +35,7 @@ public class CrateCommand implements CommandExecutor, TabExecutor {
             player.sendMessage("Esse kit de caixa não existe");
             return true;
         }
+
         player.getInventory().addItem(crate.crateItem());
         player.getInventory().addItem(crate.key().getItem());
         return false;

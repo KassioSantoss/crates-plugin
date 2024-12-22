@@ -21,7 +21,7 @@ public final class Config extends YamlConfiguration {
         try {
             save(file);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Erro ao salvar arquivo de configuração: " + name, e);
         }
     }
 
@@ -29,7 +29,7 @@ public final class Config extends YamlConfiguration {
         try {
             load(file);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Erro ao carregar arquivo de configuração: " + name, e);
         }
     }
 

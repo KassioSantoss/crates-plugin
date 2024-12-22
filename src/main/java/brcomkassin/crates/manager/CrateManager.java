@@ -69,5 +69,4 @@ public class CrateManager {
     public boolean isCrateEntity(Entity entity) {
         return entity instanceof ArmorStand;
     }
-
 }

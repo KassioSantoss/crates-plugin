@@ -36,10 +36,8 @@ public class RewardCommand implements CommandExecutor, TabExecutor {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
-        List<String> arguments = new ArrayList<>(rewardCache.getKeys());
-        if (args.length == 1) {
-            return arguments;
-        }
-        return List.of();
+        final List<String> keys = rewardCache.getKeys();
+        final List<String> arguments = new ArrayList<>(keys);
+        return args.length == 1 ? arguments : List.of();
     }
 }

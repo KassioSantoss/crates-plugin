@@ -2,19 +2,18 @@ package brcomkassin.crates.rewards;
 
 import brcomkassin.crates.rewards.rarity.RewardsRarity;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.inventory.ItemStack;
 import java.util.List;
 
-@Getter
-@Setter
-@AllArgsConstructor
-public class Reward {
-    private ItemStack item;
-    private String displayName;
-    private List<String> lore;
-    private String nameSpace;
-    private int customModelData;
+@Data(staticConstructor = "of") public class Reward {
+
+    private final ItemStack item;
+    private final String displayName;
+    private final List<String> lore;
+    private final String nameSpace;
+    private final int customModelData;
 
 }
