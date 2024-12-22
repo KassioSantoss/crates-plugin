@@ -10,11 +10,13 @@ public class CrateCacheService implements CrateCache {
     private final Map<String, Crate> cache;
     private final Set<String> cratesSet;
     private final Map<CrateLocation, Crate> locationCrateMap;
+    private final Map<String, Crate> crateIdMap;
 
     public CrateCacheService() {
         this.cache = new HashMap<>();
         this.cratesSet = new HashSet<>();
         this.locationCrateMap = new HashMap<>();
+        this.crateIdMap = new HashMap<>();
     }
 
     @Override
@@ -39,7 +41,7 @@ public class CrateCacheService implements CrateCache {
 
     @Override
     public String getCrateId(String key) {
-        return cache.get(key).id();
+        return cache.get(key).nameSpace();
     }
 
     @Override
@@ -66,6 +68,16 @@ public class CrateCacheService implements CrateCache {
     @Override
     public Map<CrateLocation, Crate> getLocationCrateMap() {
         return locationCrateMap;
+    }
+
+    @Override
+    public void addCrateById(String name, Crate crate) {
+        crateIdMap.put(name, crate);
+    }
+
+    @Override
+    public Crate getCrateById(String name) {
+        return crateIdMap.get(name);
     }
 
 }

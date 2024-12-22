@@ -5,12 +5,14 @@ import brcomkassin.crates.key.CrateKey;
 import brcomkassin.crates.CrateMaterial;
 import brcomkassin.utils.ItemBuilder;
 import org.bukkit.inventory.ItemStack;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class CrateBuilder {
 
     private CrateKey crateKey = null;
+    private String id;
     private String namespace;
     private String crateDisplayName = "Default Crate Name";
     private int crateCustomModelData = 0;
@@ -22,7 +24,7 @@ public class CrateBuilder {
         return new CrateBuilder();
     }
 
-    public CrateBuilder setId(String namespace) {
+    public CrateBuilder setNameSpace(String namespace) {
         this.namespace = namespace;
         return this;
     }
@@ -62,12 +64,20 @@ public class CrateBuilder {
         return this;
     }
 
+    public CrateBuilder setId(String id) {
+        this.id = id;
+        return this;
+    }
+
     public Crate build() {
         if (namespace == null || namespace.isEmpty()) {
             throw new IllegalStateException("O NameSpacedKey da caixa não pode ser nulo ou vazio.");
         }
         if (crateKey == null) {
             throw new IllegalStateException("A key da caixa não pode ser nulo ou vazio.");
+        }
+        if (id == null) {
+            throw new IllegalStateException("O id da caixa não pode ser nulo ou vazio.");
         }
 
         ItemStack crateItem = ItemBuilder.of(CrateMaterial.DEFAULT_CRATE_MATERIAL.getMaterial())
@@ -78,6 +88,7 @@ public class CrateBuilder {
 
         return new Crate(
                 crateKey,
+                id,
                 namespace,
                 crateDisplayName,
                 crateCustomModelData,

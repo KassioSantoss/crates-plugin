@@ -6,7 +6,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemDisplay;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -15,7 +14,7 @@ import org.bukkit.util.Transformation;
 
 public class RewardHandlerAnimation {
 
-    private static void animReward(Player player, Entity crateEntity, ItemStack item) {
+    public static void animReward(Entity crateEntity, ItemStack item) {
         if (item.getType() == Material.AIR) return;
 
         Location spawn = new Location(crateEntity.getWorld(), crateEntity.getX(), crateEntity.getY() + 0.6, crateEntity.getZ());

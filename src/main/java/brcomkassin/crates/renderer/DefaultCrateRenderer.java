@@ -6,7 +6,9 @@ import brcomkassin.crates.cache.CrateCache;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginLogger;
+
 import java.util.List;
+import java.util.logging.Logger;
 
 public class DefaultCrateRenderer implements CrateRenderer {
 
@@ -53,7 +55,8 @@ public class DefaultCrateRenderer implements CrateRenderer {
 
             Crate crate = CrateBuilder.builder()
                     .setCrateKey(keyDisplayName, keyCustomModelData, namespace)
-                    .setId(namespace)
+                    .setId(crateID)
+                    .setNameSpace(namespace)
                     .setCrateDisplayName(crateDisplayName)
                     .setCrateCustomModelData(crateCustomModelData)
                     .setBaseEntityModel(baseEntityModel)
@@ -61,7 +64,9 @@ public class DefaultCrateRenderer implements CrateRenderer {
                     .build();
 
             crateCache.add(namespace, crate);
-            crateCache.addKeys(namespace);
+            crateCache.addKeys(crateID);
+            crateCache.addCrateById(crateID, crate);
+            Logger.getGlobal().info("cache: " + crateCache.getCrateById(crateID));
             cratesAmount++;
         }
         PluginLogger.getGlobal().info("Quantidade de caixas e keys carregadas: " + cratesAmount);

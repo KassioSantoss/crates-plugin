@@ -1,14 +1,21 @@
 package brcomkassin.crates.rewards;
 
+import brcomkassin.crates.rewards.rarity.RewardsRarity;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.List;
 
 @Getter
-public record Reward(ItemStack item
-        , String displayName
-        , List<String> lore
-        , String nameSpace
-        , int customModelData) {
+@Setter
+@AllArgsConstructor
+public class Reward {
+    private ItemStack item;
+    private String displayName;
+    private List<String> lore;
+    private String nameSpace;
+    private int customModelData;
+    private RewardsRarity rarity;
+
 }

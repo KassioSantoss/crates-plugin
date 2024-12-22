@@ -8,6 +8,7 @@ import java.util.List;
 public record Crate(
         CrateKey key,
         String id,
+        String nameSpace,
         String crateDisplayName,
         int crateCustomModelData,
         String baseEntityModel,

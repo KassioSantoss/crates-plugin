@@ -27,4 +27,8 @@ public interface CrateCache {
     void addCrateByLocation(CrateLocation location, Crate crate);
 
     Map<CrateLocation, Crate> getLocationCrateMap();
+
+    void addCrateById(String name, Crate crate);
+
+    Crate getCrateById(String name);
 }
