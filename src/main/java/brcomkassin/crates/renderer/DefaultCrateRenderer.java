@@ -8,7 +8,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginLogger;
 
 import java.util.Objects;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class DefaultCrateRenderer implements CrateRenderer {
 
@@ -32,17 +31,41 @@ public class DefaultCrateRenderer implements CrateRenderer {
         String PATH = "crates.";
 
         for (String crateID : crates.getKeys(false)) {
-            ConfigurationSection section = crates.getConfigurationSection(PATH + crateID);
-            final Crate crate = ConfigurationSectionAdapterForCrateRenderer.of().adapt(section);
+            String namespace = config.getString(PATH + crateID + ".namespace", "example_id");
+            String crateDisplayName = config.getString(PATH + crateID + ".display_name", "&aCaixa de Teste");
+            int crateCustomModelData = config.getInt(PATH + crateID + ".crate_item_model.custom_model_data", 0);
+            int keyCustomModelData = config.getInt(PATH + crateID + ".key_item.custom_model_data", 0);
+            String keyDisplayName = config.getString(PATH + crateID + "key_item.display_name", "&aChave de Teste");
+            String baseEntityModel = config.getString(PATH + crateID + ".base_entity_model.model_id", "crate_example");
+            String animation = config.getString(PATH + crateID + ".base_entity_model.animation", "open");
 
-            CrateRendererDetailsDisplayer.of(crate).display();
+            showRenderedCrates(
+                    "\u001B[32m======================================================================================",
+                    "\u001B[36mID: " + crateID + "\u001B[37m -> namespace: " + namespace,
+                    "\u001B[36mID: " + crateID + "\u001B[37m -> crateDisplayName: " + crateDisplayName,
+                    "\u001B[36mID: " + crateID + "\u001B[37m -> crateCustomModelData: " + crateCustomModelData,
+                    "\u001B[36mID: " + crateID + "\u001B[37m -> keyDisplayName: " + keyDisplayName,
+                    "\u001B[36mID: " + crateID + "\u001B[37m -> keyCustomModelData: " + keyCustomModelData,
+                    "\u001B[36mID: " + crateID + "\u001B[37m -> baseEntityModel: " + baseEntityModel,
+                    "\u001B[36mID: " + crateID + "\u001B[37m -> animation: " + animation,
+                    "\u001B[32m======================================================================================\u001B[0m"
+            );
+
+            Crate crate = CrateBuilder.builder()
+                    .setCrateKey(keyDisplayName, keyCustomModelData, namespace)
+                    .setId(crateID)
+                    .setNameSpace(namespace)
+                    .setCrateDisplayName(crateDisplayName)
+                    .setCrateCustomModelData(crateCustomModelData)
+                    .setBaseEntityModel(baseEntityModel)
+                    .setAnimation(animation)
+                    .build();
 
             crateCache.add(crate.nameSpace(), crate);
-            crateCache.addKeys(crateID);
-            crateCache.addCrateById(crateID, crate);
+            crateCache.addKeys(crate.nameSpace());
+            crateCache.addCrateById(crate.id(), crate);
             cratesAmount++;
         }
-
         PluginLogger.getGlobal().info("Quantidade de caixas e keys carregadas: " + cratesAmount);
     }
 

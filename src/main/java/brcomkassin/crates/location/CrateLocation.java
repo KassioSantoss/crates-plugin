@@ -1,9 +1,12 @@
-package brcomkassin.crates;
+package brcomkassin.crates.location;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.bukkit.Location;
 
-@Data(staticConstructor = "of") public final class CrateLocation {
+@Data
+@AllArgsConstructor
+public final class CrateLocation {
 
     private final String world;
     private final double x, y, z;

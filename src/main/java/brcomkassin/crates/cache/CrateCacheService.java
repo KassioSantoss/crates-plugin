@@ -1,6 +1,6 @@
 package brcomkassin.crates.cache;
 
-import brcomkassin.crates.CrateLocation;
+import brcomkassin.crates.location.CrateLocation;
 import brcomkassin.crates.Crate;
 
 import java.util.*;

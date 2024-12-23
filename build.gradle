@@ -28,6 +28,10 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.36'
 }
 
+jar {
+    destinationDirectory = file('K:/Todos da area de trabalho/SERVIDOR PAPER 1.20.1/plugins')
+}
+
 def targetJavaVersion = 17
 java {
     def javaVersion = JavaVersion.toVersion(targetJavaVersion)

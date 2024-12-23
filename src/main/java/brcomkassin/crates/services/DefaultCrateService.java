@@ -1,6 +1,6 @@
 package brcomkassin.crates.services;
 
-import brcomkassin.crates.CrateLocation;
+import brcomkassin.crates.location.CrateLocation;
 import brcomkassin.crates.Crate;
 import brcomkassin.crates.cache.CrateCache;
 import brcomkassin.crates.manager.CrateManager;
@@ -8,6 +8,7 @@ import brcomkassin.crates.rewards.Reward;
 import brcomkassin.crates.rewards.RewardCalculator;
 import brcomkassin.crates.rewards.animation.RewardHandlerAnimation;
 import brcomkassin.crates.rewards.cache.RewardCache;
+import brcomkassin.utils.Config;
 import com.ticxo.modelengine.api.ModelEngineAPI;
 import com.ticxo.modelengine.api.animation.handler.AnimationHandler;
 import com.ticxo.modelengine.api.model.ActiveModel;
@@ -17,17 +18,22 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 public class DefaultCrateService implements CrateService {
 
+    private final Config locationConfiguration;
     private final CrateManager crateManager;
     private final CrateCache crateCache;
     private final RewardCache rewardCache;
     private final RewardCalculator rewardCalculator;
+    private final List<String> stringList = new ArrayList<>();
 
-    public DefaultCrateService(CrateManager crateManager, CrateCache crateCache, RewardCache rewardCache) {
+    public DefaultCrateService(Config locationConfiguration, CrateManager crateManager, CrateCache crateCache, RewardCache rewardCache) {
+        this.locationConfiguration = locationConfiguration;
         this.crateManager = crateManager;
         this.crateCache = crateCache;
         this.rewardCache = rewardCache;
@@ -61,6 +67,18 @@ public class DefaultCrateService implements CrateService {
         activeModel.setHitboxScale(1);
         modeledEntity.addModel(activeModel, true);
         crateCache.addCrateByLocation(crateLocation, crate);
+        Logger.getGlobal().info(crateLocation.toString() + ":" + crate.id());
+        String s = crateLocation.toString() + ":" + crate.id();
+
+        List<String> locations = locationConfiguration.getStringList("crateLocations.locations");
+        if (locations.isEmpty()) {
+            locations = new ArrayList<>();
+        }
+
+        locations.add(s);
+
+        locationConfiguration.set("crateLocations.locations", locations);
+        locationConfiguration.saveConfig();
         player.sendMessage("Caixa spawnada com sucesso!");
     }
 

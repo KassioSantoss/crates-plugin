@@ -17,6 +17,14 @@ import org.bukkit.configuration.ConfigurationSection;
         String baseEntityModel = section.getString("base_entity_model.model_id", "crate_example");
         String animation = section.getString("base_entity_model.animation", "open");
 
-        return CrateBuilder.builder().setCrateKey(keyDisplayName, keyCustomModelData, namespace).setId(id).setNameSpace(namespace).setCrateDisplayName(crateDisplayName).setCrateCustomModelData(crateCustomModelData).setBaseEntityModel(baseEntityModel).setAnimation(animation).build();
+        return CrateBuilder.builder()
+                .setCrateKey(keyDisplayName, keyCustomModelData, namespace)
+                .setId(id)
+                .setNameSpace(namespace)
+                .setCrateDisplayName(crateDisplayName)
+                .setCrateCustomModelData(crateCustomModelData)
+                .setBaseEntityModel(baseEntityModel)
+                .setAnimation(animation)
+                .build();
     }
 }

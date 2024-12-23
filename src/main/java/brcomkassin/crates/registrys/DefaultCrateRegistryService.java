@@ -11,6 +11,7 @@ import brcomkassin.crates.rewards.cache.CacheDependencyResolver;
 import brcomkassin.crates.rewards.cache.RewardCache;
 import brcomkassin.crates.services.CrateService;
 import brcomkassin.crates.services.DefaultCrateService;
+import brcomkassin.utils.Config;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -23,12 +24,12 @@ public class DefaultCrateRegistryService implements CrateRegistryService {
     private final CrateRenderer crateRenderer;
     private final JavaPlugin plugin;
 
-    public DefaultCrateRegistryService(JavaPlugin plugin, CacheDependencyResolver resolver) {
+    public DefaultCrateRegistryService(JavaPlugin plugin, CacheDependencyResolver resolver, Config locationConfig) {
         this.plugin = plugin;
         CrateCache crateCache = resolver.getCrateCache();
         RewardCache rewardCache = resolver.getRewardCache();
         CrateManager crateManager = new CrateManager(crateCache);
-        CrateService crateService = new DefaultCrateService(crateManager, crateCache, rewardCache);
+        CrateService crateService = new DefaultCrateService(locationConfig, crateManager, crateCache, rewardCache);
         this.crateInteractListener = new CrateInteractListener(crateService);
         this.cratePlaceListener = new CratePlaceListener(crateService, crateManager);
         this.crateCommand = new CrateCommand(crateCache);

@@ -1,6 +1,5 @@
 package brcomkassin.commands;
 
-import brcomkassin.crates.Crate;
 import brcomkassin.crates.rewards.Reward;
 import brcomkassin.crates.rewards.cache.RewardCache;
 import org.bukkit.command.Command;

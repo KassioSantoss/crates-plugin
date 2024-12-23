@@ -82,9 +82,21 @@ public class CrateBuilder {
         Objects.requireNonNull(crateKey, "A chave da caixa não pode ser nula ou vazia.");
         Objects.requireNonNull(id, "O ID da caixa não pode ser nulo ou vazio.");
 
-        ItemStack crateItem = ItemBuilder.of(CrateMaterial.DEFAULT_CRATE_MATERIAL.getMaterial()).setName(crateDisplayName).setCustomModelData(crateCustomModelData).setNameSpacedKey(namespace).build();
+        ItemStack crateItem = ItemBuilder.of(CrateMaterial.DEFAULT_CRATE_MATERIAL.getMaterial())
+                .setName(crateDisplayName)
+                .setCustomModelData(crateCustomModelData)
+                .setNameSpacedKey(namespace)
+                .build();
 
-        return new Crate(crateKey, id, namespace, crateDisplayName, crateCustomModelData, baseEntityModel, animation, crateItem, new ArrayList<>(rewards));
+        return new Crate(crateKey,
+                id,
+                namespace,
+                crateDisplayName,
+                crateCustomModelData,
+                baseEntityModel,
+                animation,
+                crateItem,
+                new ArrayList<>(rewards));
     }
 }
 
