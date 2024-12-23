@@ -8,7 +8,10 @@ import brcomkassin.crates.rewards.registry.DefaultRewardRegistryService;
 import brcomkassin.crates.rewards.registry.RewardRegistryService;
 import brcomkassin.utils.Config;
 import lombok.Getter;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.List;
 
 public final class CratesPlugin extends JavaPlugin {
 
@@ -42,7 +45,6 @@ public final class CratesPlugin extends JavaPlugin {
         rarityConfig.saveConfig();
         crateConfig.saveConfig();
     }
-
 }
 
 

@@ -53,7 +53,7 @@ public class DefaultRewardRenderer implements RewardRenderer {
                     .setCustomModelData(customModelData)
                     .build();
 
-            Reward reward = Reward.of(rewardItem, displayName, lore, namespace, customModelData);
+            Reward reward = Reward.of(  rewardItem, displayName, lore, namespace, customModelData);
             rewardCache.add(rewardsID, reward);
             rewardCache.addKeys(rewardsID);
         }

@@ -37,8 +37,7 @@ public class DefaultCrateService implements CrateService {
     @Override
     public void summonCrate(Player player, Location location, Crate crate) {
         Location centeredLocation = location.getBlock().getLocation().add(0.5, 0, 0.5);
-        CrateLocation crateLocation = new CrateLocation(centeredLocation.getX(), centeredLocation.getY(), centeredLocation.getZ());
-
+        CrateLocation crateLocation = CrateLocation.of(centeredLocation);
         if (crateCache.getLocationCrateMap().containsKey(crateLocation)) return;
 
         ArmorStand box = centeredLocation.getWorld().spawn(centeredLocation, ArmorStand.class);
@@ -79,7 +78,8 @@ public class DefaultCrateService implements CrateService {
         if (!keyItem) return;
 
         Crate crate = crateManager.getCrateFromKey(item);
-        CrateLocation crateLocation = new CrateLocation(entity.getLocation().getX(), entity.getLocation().getY(), entity.getLocation().getZ());
+        final Location entityLocation = entity.getLocation();
+        CrateLocation crateLocation = CrateLocation.of(entityLocation);
         Crate crateTarget = crateCache.getCrateByLocation(crateLocation);
 
         if (crate == null || crateTarget == null) return;
