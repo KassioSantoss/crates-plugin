@@ -32,9 +32,6 @@ public class DefaultRewardRenderer implements RewardRenderer {
     }
 
     private void loadItemsReward(FileConfiguration itemRarityConfiguration, FileConfiguration rarityConfiguration) {
-        if (!itemRarityConfiguration.contains("rewards")) {
-            throw new IllegalArgumentException("Configuração inválida! Seção 'rewards' não encontrada.");
-        }
         ConfigurationSection rewardsSection = itemRarityConfiguration.getConfigurationSection("rewards");
         Objects.requireNonNull(rewardsSection, "Invalid Configuration Section 'rewards' not found.");
 
@@ -53,7 +50,7 @@ public class DefaultRewardRenderer implements RewardRenderer {
                     .setCustomModelData(customModelData)
                     .build();
 
-            Reward reward = Reward.of(  rewardItem, displayName, lore, namespace, customModelData);
+            Reward reward = Reward.of(rewardItem, displayName, lore, namespace, customModelData);
             rewardCache.add(rewardsID, reward);
             rewardCache.addKeys(rewardsID);
         }
@@ -61,9 +58,6 @@ public class DefaultRewardRenderer implements RewardRenderer {
     }
 
     private void loadItemsRarity(FileConfiguration fileConfiguration) {
-        if (!fileConfiguration.contains("rarity")) {
-            throw new IllegalArgumentException("Configuração inválida! Seção 'rarity' não encontrada.");
-        }
         ConfigurationSection raritySection = fileConfiguration.getConfigurationSection("rarity");
         Objects.requireNonNull(raritySection, "Invalid Configuration Section 'rarity' not found.");
 

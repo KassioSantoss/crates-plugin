@@ -3,6 +3,7 @@ package brcomkassin.crates.builder;
 import brcomkassin.crates.Crate;
 import brcomkassin.crates.key.CrateKey;
 import brcomkassin.crates.CrateMaterial;
+import brcomkassin.crates.rewards.Reward;
 import brcomkassin.utils.ItemBuilder;
 import org.bukkit.inventory.ItemStack;
 
@@ -19,7 +20,7 @@ public class CrateBuilder {
     private int crateCustomModelData;
     private String baseEntityModel;
     private String animation;
-    private final List<String> rewards;
+    private final List<Reward> rewards;
 
     public CrateBuilder() {
         this.crateKey = null;
@@ -59,7 +60,7 @@ public class CrateBuilder {
         return this;
     }
 
-    public CrateBuilder addReward(String reward) {
+    public CrateBuilder addReward(Reward reward) {
         this.rewards.add(reward);
         return this;
     }
@@ -95,8 +96,7 @@ public class CrateBuilder {
                 crateCustomModelData,
                 baseEntityModel,
                 animation,
-                crateItem,
-                new ArrayList<>(rewards));
+                crateItem);
     }
 }
 

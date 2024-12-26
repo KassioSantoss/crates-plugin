@@ -6,7 +6,6 @@ import brcomkassin.crates.location.CrateLocation;
 import brcomkassin.crates.location.parser.CrateParser;
 import brcomkassin.crates.location.parser.LocationParser;
 import org.bukkit.configuration.file.FileConfiguration;
-
 import java.util.List;
 import java.util.logging.Logger;
 
