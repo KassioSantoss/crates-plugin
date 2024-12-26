@@ -5,19 +5,18 @@ import brcomkassin.crates.cache.CrateCache;
 import brcomkassin.crates.rewards.cache.RewardCache;
 import brcomkassin.crates.rewards.rarity.ItemRarity;
 import brcomkassin.crates.rewards.rarity.RewardsRarity;
+
 import java.util.*;
 
 public class RewardCalculator {
 
-    private final CrateCache cache;
+    private final RewardCache rewardCache;
 
-    public RewardCalculator(CrateCache cache) {
-        this.cache = cache;
+    public RewardCalculator(CrateCache cache, RewardCache rewardCache) {
+        this.rewardCache = rewardCache;
     }
 
-    public Reward calculateReward(String crateId, RewardCache rewardCache) {
-        Crate crate = cache.getCrateById(crateId);
-
+    public Reward calculateReward(Crate crate) {
         List<ItemRarity> itemRarities = rewardCache.getItemRarities(crate.id());
         RewardsRarity selectedRarity = getRandomRarity(itemRarities);
 

@@ -18,6 +18,7 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +29,6 @@ public class DefaultCrateService implements CrateService {
     private final Config locationConfiguration;
     private final CrateManager crateManager;
     private final CrateCache crateCache;
-    private final RewardCache rewardCache;
     private final RewardCalculator rewardCalculator;
     private final List<String> stringList = new ArrayList<>();
 
@@ -36,8 +36,7 @@ public class DefaultCrateService implements CrateService {
         this.locationConfiguration = locationConfiguration;
         this.crateManager = crateManager;
         this.crateCache = crateCache;
-        this.rewardCache = rewardCache;
-        this.rewardCalculator = new RewardCalculator(crateCache);
+        this.rewardCalculator = new RewardCalculator(crateCache, rewardCache);
     }
 
     @Override
@@ -107,8 +106,8 @@ public class DefaultCrateService implements CrateService {
         AnimationHandler animationHandler = activeModel.getAnimationHandler();
         animationHandler.playAnimation(crate.animation(), 0.3, 0.3, 1, true);
 
-        Reward reward = rewardCalculator.calculateReward(crate.id(), rewardCache);
-        RewardHandlerAnimation.animReward(entity, reward.getItem());
+        ItemStack reward = rewardCalculator.calculateReward(crate).getItem();
+        RewardHandlerAnimation.animReward(entity, reward);
         player.sendMessage("Caixa aberta com sucesso!");
     }
 
