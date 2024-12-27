@@ -1,48 +1,49 @@
 package brcomkassin.crates.rewards.cache;
 
-import brcomkassin.crates.rewards.rarity.ItemRarity;
+import brcomkassin.crates.Crate;
 import brcomkassin.crates.rewards.Reward;
+
 import java.util.*;
 
 public class RewardCacheService implements RewardCache {
 
-    private final Map<String, List<ItemRarity>> itemRarityMap;
-    private final Map<String, Reward> idRewardMap;
-    private final Set<String> keys;
+    private final Map<Crate, List<Reward>> crateToRewards;
+    private final Map<String, Reward> rewardById;
+    private final Set<String> rewardKeys;
 
     public RewardCacheService() {
-        this.itemRarityMap = new HashMap<>();
-        this.idRewardMap = new HashMap<>();
-        this.keys = new HashSet<>();
+        this.crateToRewards = new HashMap<>();
+        this.rewardById = new HashMap<>();
+        this.rewardKeys = new HashSet<>();
     }
 
     @Override
-    public void add(String id, Reward reward) {
-        idRewardMap.put(id, reward);
+    public void addRewardById(String id, Reward reward) {
+        rewardById.put(id, reward);
     }
 
     @Override
-    public void addKeys(String key) {
-        keys.add(key);
+    public void addRewardKey(String key) {
+        rewardKeys.add(key);
     }
 
     @Override
-    public List<String> getKeys() {
-        return new ArrayList<>(keys);
+    public List<String> getAllRewardKeys() {
+        return new ArrayList<>(rewardKeys);
     }
 
     @Override
-    public Reward getReward(String id) {
-        return idRewardMap.get(id);
+    public Reward findRewardById(String id) {
+        return rewardById.get(id);
     }
 
     @Override
-    public List<ItemRarity> getItemRarities(String crateID) {
-        return itemRarityMap.get(crateID);
+    public List<Reward> getRewardsForCrate(Crate crate) {
+        return crateToRewards.get(crate);
     }
 
     @Override
-    public void addItemRarity(String crateID, List<ItemRarity> itemRarities) {
-        itemRarityMap.put(crateID, itemRarities);
+    public void addRewardsForCrate(Crate crate, List<Reward> rewards) {
+        crateToRewards.put(crate, rewards);
     }
 }

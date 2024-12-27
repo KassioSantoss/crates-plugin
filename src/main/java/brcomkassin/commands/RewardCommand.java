@@ -28,14 +28,14 @@ public class RewardCommand implements CommandExecutor, TabExecutor {
         if (args.length < 1) {
             return true;
         }
-        Reward reward = rewardCache.getReward(args[0]);
+        Reward reward = rewardCache.findRewardById(args[0]);
         player.getInventory().addItem(reward.getItem());
         return false;
     }
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
-        final List<String> keys = rewardCache.getKeys();
+        final List<String> keys = rewardCache.getAllRewardKeys();
         final List<String> arguments = new ArrayList<>(keys);
         return args.length == 1 ? arguments : List.of();
     }

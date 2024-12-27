@@ -8,8 +8,10 @@ import brcomkassin.utils.ItemBuilder;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Logger;
 
 public class CrateBuilder {
 
@@ -20,7 +22,7 @@ public class CrateBuilder {
     private int crateCustomModelData;
     private String baseEntityModel;
     private String animation;
-    private final List<Reward> rewards;
+    private final List<Reward> rewardList;
 
     public CrateBuilder() {
         this.crateKey = null;
@@ -28,7 +30,7 @@ public class CrateBuilder {
         this.crateCustomModelData = 0;
         this.baseEntityModel = "crate_example";
         this.animation = "open";
-        this.rewards = new ArrayList<>();
+        this.rewardList = new ArrayList<>();
     }
 
     public static CrateBuilder builder() {
@@ -60,8 +62,8 @@ public class CrateBuilder {
         return this;
     }
 
-    public CrateBuilder addReward(Reward reward) {
-        this.rewards.add(reward);
+    public CrateBuilder addRewards(List<Reward> rewards) {
+        this.rewardList.addAll(rewards);
         return this;
     }
 
@@ -83,6 +85,10 @@ public class CrateBuilder {
         Objects.requireNonNull(crateKey, "A chave da caixa não pode ser nula ou vazia.");
         Objects.requireNonNull(id, "O ID da caixa não pode ser nulo ou vazio.");
 
+        if (rewardList.isEmpty()) {
+            Logger.getGlobal().info("A lista de recompensas da caixa: " + id + " está vazia.");
+        }
+
         ItemStack crateItem = ItemBuilder.of(CrateMaterial.DEFAULT_CRATE_MATERIAL.getMaterial())
                 .setName(crateDisplayName)
                 .setCustomModelData(crateCustomModelData)
@@ -96,7 +102,8 @@ public class CrateBuilder {
                 crateCustomModelData,
                 baseEntityModel,
                 animation,
-                crateItem);
+                crateItem,
+                rewardList);
     }
 }
 

@@ -1,10 +1,7 @@
 package brcomkassin.crates.rewards;
 
 import brcomkassin.crates.Crate;
-import brcomkassin.crates.cache.CrateCache;
 import brcomkassin.crates.rewards.cache.RewardCache;
-import brcomkassin.crates.rewards.rarity.ItemRarity;
-import brcomkassin.crates.rewards.rarity.RewardsRarity;
 
 import java.util.*;
 
@@ -12,44 +9,48 @@ public class RewardCalculator {
 
     private final RewardCache rewardCache;
 
-    public RewardCalculator(CrateCache cache, RewardCache rewardCache) {
+    public RewardCalculator(RewardCache rewardCache) {
         this.rewardCache = rewardCache;
     }
 
+    /**
+     * Calcula uma recompensa aleatória com base nas probabilidades definidas para a caixa.
+     *
+     * @param crate A caixa de onde as recompensas serão sorteadas.
+     * @return Uma recompensa aleatória.
+     */
     public Reward calculateReward(Crate crate) {
-        List<ItemRarity> itemRarities = rewardCache.getItemRarities(crate.id());
-        RewardsRarity selectedRarity = getRandomRarity(itemRarities);
+        List<Reward> rewardsForCrate = rewardCache.getRewardsForCrate(crate);
 
-        List<Reward> rewards = itemRarities.stream()
-                .filter(itemRarity -> itemRarity.getRarity() == selectedRarity)
-                .flatMap(itemRarity -> itemRarity.getRewards().stream())
-                .toList();
-
-        if (rewards.isEmpty()) {
-            throw new IllegalStateException("Nenhuma raridade ou item configurado para a caixa: " + crate.id());
+        if (rewardsForCrate.isEmpty()) {
+            throw new IllegalStateException("Nenhuma recompensa configurada para a caixa: " + crate.getId());
         }
-        return getRandomReward(rewards);
+
+        // Escolhe uma recompensa aleatória com base na probabilidade.
+        return getRandomReward(rewardsForCrate);
     }
 
-    private RewardsRarity getRandomRarity(List<ItemRarity> itemRarities) {
-        double totalWeight = itemRarities.stream()
-                .mapToDouble(itemRarity -> itemRarity.getRarity().getPercentage())
+    /**
+     * Seleciona uma recompensa aleatória considerando as probabilidades de cada uma.
+     *
+     * @param rewards A lista de recompensas disponíveis.
+     * @return Uma recompensa aleatória.
+     */
+    private Reward getRandomReward(List<Reward> rewards) {
+        double totalWeight = rewards.stream()
+                .mapToDouble(reward -> reward.getRarity().getPercentage())
                 .sum();
 
         double randomValue = new Random().nextDouble() * totalWeight;
         double cumulativeWeight = 0.0;
 
-        for (ItemRarity itemRarity : itemRarities) {
-            cumulativeWeight += itemRarity.getRarity().getPercentage();
+        for (Reward reward : rewards) {
+            cumulativeWeight += reward.getRarity().getPercentage();
             if (randomValue <= cumulativeWeight) {
-                return itemRarity.getRarity();
+                return reward;
             }
         }
-        throw new IllegalStateException("Erro ao calcular raridade aleatória.");
-    }
 
-    private Reward getRandomReward(List<Reward> rewards) {
-        Random random = new Random();
-        return rewards.get(random.nextInt(rewards.size()));
+        throw new IllegalStateException("Erro ao calcular recompensa aleatória.");
     }
 }

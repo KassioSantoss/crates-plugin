@@ -36,8 +36,8 @@ public class CrateCommand implements CommandExecutor, TabExecutor {
             return true;
         }
 
-        player.getInventory().addItem(crate.crateItem());
-        player.getInventory().addItem(crate.key().getItem());
+        player.getInventory().addItem(crate.getCrateItem());
+        player.getInventory().addItem(crate.getKey().getItem());
         return false;
     }
 

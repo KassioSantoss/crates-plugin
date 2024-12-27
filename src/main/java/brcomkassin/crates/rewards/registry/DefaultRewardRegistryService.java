@@ -18,14 +18,13 @@ public class DefaultRewardRegistryService implements RewardRegistryService {
     public DefaultRewardRegistryService(JavaPlugin plugin, CacheDependencyResolver resolver) {
         this.plugin = plugin;
         RewardCache rewardCache = resolver.getRewardCache();
-        CrateCache crateCache = resolver.getCrateCache();
-        this.rewardRenderer = new DefaultRewardRenderer(rewardCache, crateCache);
+        this.rewardRenderer = new DefaultRewardRenderer(rewardCache);
         this.rewardCommand = new RewardCommand(rewardCache);
     }
 
     @Override
-    public void registry(FileConfiguration itemRarityConfiguration, FileConfiguration rarityConfiguration) {
-        rewardRenderer.renderer(itemRarityConfiguration, rarityConfiguration);
+    public void registry(FileConfiguration itemRarityFileConfiguration) {
+        rewardRenderer.renderer(itemRarityFileConfiguration);
         plugin.getCommand("reward").setExecutor(rewardCommand);
     }
 }

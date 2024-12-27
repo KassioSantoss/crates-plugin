@@ -3,18 +3,24 @@ package brcomkassin.crates.renderer;
 import brcomkassin.crates.Crate;
 import brcomkassin.crates.builder.CrateBuilder;
 import brcomkassin.crates.cache.CrateCache;
+import brcomkassin.crates.rewards.Reward;
+import brcomkassin.crates.rewards.cache.RewardCache;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.PluginLogger;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class DefaultCrateRenderer implements CrateRenderer {
 
     private final CrateCache crateCache;
+    private final RewardCache rewardCache;
 
-    public DefaultCrateRenderer(CrateCache crateCache) {
+    public DefaultCrateRenderer(CrateCache crateCache, RewardCache rewardCache) {
         this.crateCache = crateCache;
+        this.rewardCache = rewardCache;
     }
 
     @Override
@@ -38,6 +44,7 @@ public class DefaultCrateRenderer implements CrateRenderer {
             String keyDisplayName = config.getString(PATH + crateID + "key_item.display_name", "&aChave de Teste");
             String baseEntityModel = config.getString(PATH + crateID + ".base_entity_model.model_id", "crate_example");
             String animation = config.getString(PATH + crateID + ".base_entity_model.animation", "open");
+            List<String> rewardsName = config.getStringList(PATH + crateID + ".rewards");
 
             showRenderedCrates(
                     "\u001B[32m======================================================================================",
@@ -48,9 +55,18 @@ public class DefaultCrateRenderer implements CrateRenderer {
                     "\u001B[36mID: " + crateID + "\u001B[37m -> keyCustomModelData: " + keyCustomModelData,
                     "\u001B[36mID: " + crateID + "\u001B[37m -> baseEntityModel: " + baseEntityModel,
                     "\u001B[36mID: " + crateID + "\u001B[37m -> animation: " + animation,
+                    "\u001B[36mID: " + crateID + "\u001B[37m -> rewards: " + rewardsName,
                     "\u001B[32m======================================================================================\u001B[0m"
             );
 
+            List<Reward> rewardList = new ArrayList<>();
+
+            for (String rewardName : rewardsName) {
+                Reward reward = rewardCache.findRewardById(rewardName);
+                rewardList.add(reward);
+            }
+
+            PluginLogger.getGlobal().info("Recompensas para a caixa: " + crateID + " || Lista: " + rewardList);
             Crate crate = CrateBuilder.builder()
                     .setCrateKey(keyDisplayName, keyCustomModelData, namespace)
                     .setId(crateID)
@@ -59,11 +75,13 @@ public class DefaultCrateRenderer implements CrateRenderer {
                     .setCrateCustomModelData(crateCustomModelData)
                     .setBaseEntityModel(baseEntityModel)
                     .setAnimation(animation)
+                    .addRewards(rewardList)
                     .build();
 
-            crateCache.add(crate.nameSpace(), crate);
-            crateCache.addKeys(crate.nameSpace());
-            crateCache.addCrateById(crate.id(), crate);
+            crateCache.add(crate.getNameSpace(), crate);
+            crateCache.addKeys(crate.getNameSpace());
+            crateCache.addCrateById(crate.getId(), crate);
+            rewardCache.addRewardsForCrate(crate, rewardList);
             cratesAmount++;
         }
         PluginLogger.getGlobal().info("Quantidade de caixas e keys carregadas: " + cratesAmount);

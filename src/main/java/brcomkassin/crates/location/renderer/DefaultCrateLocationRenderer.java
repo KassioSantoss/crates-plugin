@@ -34,7 +34,7 @@ public class DefaultCrateLocationRenderer implements CrateLocationRenderer {
             Crate crate = CrateParser.fromString(crateCache, location);
             CrateLocation crateLocation = LocationParser.from(location);
             Logger.getGlobal().info("crateLocation: " + crateLocation.toString());
-            Logger.getGlobal().info("crate: " + crate.id());
+            Logger.getGlobal().info("crate: " + crate.getId());
             crateCache.addCrateByLocation(crateLocation, crate);
         }
     }

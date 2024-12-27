@@ -33,7 +33,7 @@ public class DefaultCrateRegistryService implements CrateRegistryService {
         this.crateInteractListener = new CrateInteractListener(crateService);
         this.cratePlaceListener = new CratePlaceListener(crateService, crateManager);
         this.crateCommand = new CrateCommand(crateCache);
-        this.crateRenderer = new DefaultCrateRenderer(crateCache);
+        this.crateRenderer = new DefaultCrateRenderer(crateCache, rewardCache);
     }
 
     @Override

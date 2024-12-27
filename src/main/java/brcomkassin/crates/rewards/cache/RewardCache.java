@@ -1,23 +1,22 @@
 package brcomkassin.crates.rewards.cache;
 
-import brcomkassin.crates.rewards.rarity.ItemRarity;
+import brcomkassin.crates.Crate;
 import brcomkassin.crates.rewards.Reward;
-import brcomkassin.crates.rewards.rarity.RewardsRarity;
 
 import java.util.List;
 
 public interface RewardCache {
 
+    void addRewardById(String id, Reward reward);
 
-    void add(String id, Reward reward);
+    void addRewardKey(String key);
 
-    void addKeys(String key);
+    void addRewardsForCrate(Crate crate, List<Reward> rewards);
 
-    List<String> getKeys();
+    List<String> getAllRewardKeys();
 
-    Reward getReward(String id);
+    List<Reward> getRewardsForCrate(Crate crate);
 
-    List<ItemRarity> getItemRarities(String crateID);
+    Reward findRewardById(String id);
 
-    void addItemRarity(String crateID, List<ItemRarity> itemRarities);
 }

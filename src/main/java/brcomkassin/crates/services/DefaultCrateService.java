@@ -30,13 +30,14 @@ public class DefaultCrateService implements CrateService {
     private final CrateManager crateManager;
     private final CrateCache crateCache;
     private final RewardCalculator rewardCalculator;
-    private final List<String> stringList = new ArrayList<>();
+    private final RewardHandlerAnimation rewardHandlerAnimation;
 
     public DefaultCrateService(Config locationConfiguration, CrateManager crateManager, CrateCache crateCache, RewardCache rewardCache) {
         this.locationConfiguration = locationConfiguration;
         this.crateManager = crateManager;
         this.crateCache = crateCache;
-        this.rewardCalculator = new RewardCalculator(crateCache, rewardCache);
+        this.rewardCalculator = new RewardCalculator(rewardCache);
+        this.rewardHandlerAnimation = new RewardHandlerAnimation(rewardCache);
     }
 
     @Override
@@ -47,10 +48,10 @@ public class DefaultCrateService implements CrateService {
 
         ArmorStand box = centeredLocation.getWorld().spawn(centeredLocation, ArmorStand.class);
         ModeledEntity modeledEntity = ModelEngineAPI.createModeledEntity(box);
-        ActiveModel activeModel = ModelEngineAPI.createActiveModel(crate.baseEntityModel());
+        ActiveModel activeModel = ModelEngineAPI.createActiveModel(crate.getBaseEntityModel());
 
         if (activeModel == null) {
-            throw new RuntimeException("Não foi encontrado nenhum modelo com esse id de caixa: " + crate.nameSpace());
+            throw new RuntimeException("Não foi encontrado nenhum modelo com esse id de caixa: " + crate.getNameSpace());
         }
 
         double deltaX = player.getLocation().getX() - centeredLocation.getX();
@@ -66,8 +67,8 @@ public class DefaultCrateService implements CrateService {
         activeModel.setHitboxScale(1);
         modeledEntity.addModel(activeModel, true);
         crateCache.addCrateByLocation(crateLocation, crate);
-        Logger.getGlobal().info(crateLocation.toString() + ":" + crate.id());
-        String s = crateLocation.toString() + ":" + crate.id();
+        Logger.getGlobal().info(crateLocation + ":" + crate.getId());
+        String s = crateLocation + ":" + crate.getId();
 
         List<String> locations = locationConfiguration.getStringList("crateLocations.locations");
         if (locations.isEmpty()) {
@@ -100,14 +101,14 @@ public class DefaultCrateService implements CrateService {
         Crate crateTarget = crateCache.getCrateByLocation(crateLocation);
 
         if (crate == null || crateTarget == null) return;
-        if (!crate.nameSpace().equals(crateTarget.nameSpace())) return;
+        if (!crate.getNameSpace().equals(crateTarget.getNameSpace())) return;
 
-        ActiveModel activeModel = activeModels.get(crate.baseEntityModel());
+        ActiveModel activeModel = activeModels.get(crate.getBaseEntityModel());
         AnimationHandler animationHandler = activeModel.getAnimationHandler();
-        animationHandler.playAnimation(crate.animation(), 0.3, 0.3, 1, true);
+        animationHandler.playAnimation(crate.getAnimation(), 0.3, 0.3, 1, true);
 
         ItemStack reward = rewardCalculator.calculateReward(crate).getItem();
-        RewardHandlerAnimation.animReward(entity, reward);
+        rewardHandlerAnimation.animReward(entity, reward);
         player.sendMessage("Caixa aberta com sucesso!");
     }
 
