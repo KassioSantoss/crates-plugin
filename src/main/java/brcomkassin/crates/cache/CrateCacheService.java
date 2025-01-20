@@ -25,8 +25,8 @@ public class CrateCacheService implements CrateCache {
     }
 
     @Override
-    public void remove(String key, Crate crate) {
-        cache.remove(key, crate);
+    public void removeCreateLocation(CrateLocation crateLocation, Crate crate) {
+        locationCrateMap.remove(crateLocation, crate);
     }
 
     @Override

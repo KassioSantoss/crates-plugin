@@ -10,7 +10,7 @@ public interface CrateCache {
 
     void add(String key, Crate crate);
 
-    void remove(String key, Crate crate);
+    void removeCreateLocation(CrateLocation crateLocation, Crate crate);
 
     void remove(String key);
 

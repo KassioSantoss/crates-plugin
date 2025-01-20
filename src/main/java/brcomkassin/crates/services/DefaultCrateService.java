@@ -4,7 +4,6 @@ import brcomkassin.crates.location.CrateLocation;
 import brcomkassin.crates.Crate;
 import brcomkassin.crates.cache.CrateCache;
 import brcomkassin.crates.manager.CrateManager;
-import brcomkassin.crates.rewards.Reward;
 import brcomkassin.crates.rewards.RewardCalculator;
 import brcomkassin.crates.rewards.animation.RewardHandlerAnimation;
 import brcomkassin.crates.rewards.cache.RewardCache;
@@ -18,11 +17,8 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 public class DefaultCrateService implements CrateService {
 
@@ -37,7 +33,7 @@ public class DefaultCrateService implements CrateService {
         this.crateManager = crateManager;
         this.crateCache = crateCache;
         this.rewardCalculator = new RewardCalculator(rewardCache);
-        this.rewardHandlerAnimation = new RewardHandlerAnimation(rewardCache);
+        this.rewardHandlerAnimation = new RewardHandlerAnimation(rewardCalculator);
     }
 
     @Override
@@ -62,19 +58,15 @@ public class DefaultCrateService implements CrateService {
         box.setVisible(false);
         box.setInvulnerable(true);
         box.setCanMove(false);
+        box.setSmall(true);
         box.setSmall(false);
         box.setRotation(yaw, 0.0f);
-        activeModel.setHitboxScale(1);
         modeledEntity.addModel(activeModel, true);
         crateCache.addCrateByLocation(crateLocation, crate);
-        Logger.getGlobal().info(crateLocation + ":" + crate.getId());
+
         String s = crateLocation + ":" + crate.getId();
 
         List<String> locations = locationConfiguration.getStringList("crateLocations.locations");
-        if (locations.isEmpty()) {
-            locations = new ArrayList<>();
-        }
-
         locations.add(s);
 
         locationConfiguration.set("crateLocations.locations", locations);
@@ -107,8 +99,7 @@ public class DefaultCrateService implements CrateService {
         AnimationHandler animationHandler = activeModel.getAnimationHandler();
         animationHandler.playAnimation(crate.getAnimation(), 0.3, 0.3, 1, true);
 
-        ItemStack reward = rewardCalculator.calculateReward(crate).getItem();
-        rewardHandlerAnimation.animReward(entity, reward);
+        rewardHandlerAnimation.animReward(player, entity, crate);
         player.sendMessage("Caixa aberta com sucesso!");
     }
 

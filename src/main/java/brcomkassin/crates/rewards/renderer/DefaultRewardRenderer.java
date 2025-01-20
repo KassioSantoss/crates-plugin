@@ -8,7 +8,6 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.List;
 import java.util.Objects;
 
@@ -46,6 +45,7 @@ public class DefaultRewardRenderer implements RewardRenderer {
             Reward reward = Reward.of(rewardItem, displayName, lore, namespace, customModelData, rarity);
             rewardCache.addRewardById(rewardsID, reward);
             rewardCache.addRewardKey(rewardsID);
+
         }
     }
 
