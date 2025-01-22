@@ -2,7 +2,7 @@ package brcomkassin.crates.rewards.animation;
 
 import brcomkassin.CratesPlugin;
 import brcomkassin.crates.Crate;
-import brcomkassin.crates.cache.CrateCache;
+import brcomkassin.crates.cache.CrateCacheService;
 import brcomkassin.crates.rewards.Reward;
 import brcomkassin.crates.rewards.RewardCalculator;
 import org.bukkit.Color;
@@ -17,21 +17,20 @@ import org.bukkit.util.Transformation;
 
 public class RewardHandlerAnimation {
 
-    private final CrateCache crateCache;
     private final RewardCalculator rewardCalculator;
 
-    public RewardHandlerAnimation(CrateCache crateCache, RewardCalculator rewardCalculator) {
-        this.crateCache = crateCache;
+    public RewardHandlerAnimation(RewardCalculator rewardCalculator) {
         this.rewardCalculator = rewardCalculator;
     }
 
     public void animReward(Player player, Entity crateEntity, Crate crate) {
         Reward reward = rewardCalculator.calculateReward(crate);
-        spawnParticleCircle(reward, player, crateEntity.getLocation(), 2.2D);
+        spawnParticleCircle(reward, player, crateEntity, 2.2D);
     }
 
-    private void spawnParticleCircle(Reward reward, Player player, Location center, final double maxHeight) {
+    private void spawnParticleCircle(Reward reward, Player player, Entity crateEntity, final double maxHeight) {
         Particle.DustOptions dustOptions = new Particle.DustOptions(Color.BLACK, 0.8F);
+        Location center = crateEntity.getLocation();
         double finalMaxHeight = center.getY() + maxHeight;
         Location location = new Location(center.getWorld(), center.getX(), finalMaxHeight - 0.5, center.getZ());
 
@@ -46,7 +45,7 @@ public class RewardHandlerAnimation {
             public void run() {
                 if (currentY >= finalMaxHeight) {
                     ItemDisplay itemDisplay = setItemDisplay(location, reward);
-                    rotateAndRemoveItemDisplay(itemDisplay, 5);
+                    rotateAndRemoveItemDisplay(itemDisplay, 5, crateEntity);
                     player.getInventory().addItem(reward.getItem());
                     cancel();
                     return;
@@ -73,7 +72,7 @@ public class RewardHandlerAnimation {
         }.runTaskTimer(CratesPlugin.getInstance(), 0, 1);
     }
 
-    private void rotateAndRemoveItemDisplay(ItemDisplay itemDisplay, int seconds) {
+    private void rotateAndRemoveItemDisplay(ItemDisplay itemDisplay, int seconds, Entity entity) {
         new BukkitRunnable() {
             int ticks = 0;
             final int maxTicks = seconds * 20;
@@ -83,6 +82,7 @@ public class RewardHandlerAnimation {
             public void run() {
                 if (ticks >= maxTicks) {
                     itemDisplay.remove();
+                    entity.remove();
                     cancel();
                     return;
                 }

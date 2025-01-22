@@ -1,8 +1,8 @@
 package brcomkassin.crates.rewards.cache;
 
-import brcomkassin.crates.cache.CrateCache;
+import brcomkassin.crates.cache.CrateCacheService;
 
 public interface CacheDependencyResolver {
     RewardCache getRewardCache();
-    CrateCache getCrateCache();
+    CrateCacheService getCrateCache();
 }

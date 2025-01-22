@@ -2,24 +2,25 @@ package brcomkassin.crates.renderer;
 
 import brcomkassin.crates.Crate;
 import brcomkassin.crates.builder.CrateBuilder;
-import brcomkassin.crates.cache.CrateCache;
+import brcomkassin.crates.cache.CrateCacheService;
 import brcomkassin.crates.rewards.Reward;
 import brcomkassin.crates.rewards.cache.RewardCache;
+import brcomkassin.utils.ColoredLogger;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.PluginLogger;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class DefaultCrateRenderer implements CrateRenderer {
+public class DefaultCrateRenderer implements CrateRendererService {
 
-    private final CrateCache crateCache;
+    private final CrateCacheService crateCacheService;
     private final RewardCache rewardCache;
 
-    public DefaultCrateRenderer(CrateCache crateCache, RewardCache rewardCache) {
-        this.crateCache = crateCache;
+    public DefaultCrateRenderer(CrateCacheService crateCacheService, RewardCache rewardCache) {
+        this.crateCacheService = crateCacheService;
         this.rewardCache = rewardCache;
     }
 
@@ -38,25 +39,26 @@ public class DefaultCrateRenderer implements CrateRenderer {
 
         for (String crateID : crates.getKeys(false)) {
             String namespace = config.getString(PATH + crateID + ".namespace", "example_id");
-            String crateDisplayName = config.getString(PATH + crateID + ".display_name", "&aCaixa de Teste");
+            String crateDisplayName = config.getString(PATH + crateID + ".display_name", ChatColor.GREEN + "Caixa de Teste");
             int crateCustomModelData = config.getInt(PATH + crateID + ".crate_item_model.custom_model_data", 0);
             int keyCustomModelData = config.getInt(PATH + crateID + ".key_item.custom_model_data", 0);
-            String keyDisplayName = config.getString(PATH + crateID + "key_item.display_name", "&aChave de Teste");
+            String keyDisplayName = config.getString(PATH + crateID + "key_item.display_name", ChatColor.GREEN + " Chave de Teste");
             String baseEntityModel = config.getString(PATH + crateID + ".base_entity_model.model_id", "crate_example");
+
             String animation = config.getString(PATH + crateID + ".base_entity_model.animation", "open");
             List<String> rewardsName = config.getStringList(PATH + crateID + ".rewards");
 
-            showRenderedCrates(
-                    "\u001B[32m======================================================================================",
-                    "\u001B[36mID: " + crateID + "\u001B[37m -> namespace: " + namespace,
-                    "\u001B[36mID: " + crateID + "\u001B[37m -> crateDisplayName: " + crateDisplayName,
-                    "\u001B[36mID: " + crateID + "\u001B[37m -> crateCustomModelData: " + crateCustomModelData,
-                    "\u001B[36mID: " + crateID + "\u001B[37m -> keyDisplayName: " + keyDisplayName,
-                    "\u001B[36mID: " + crateID + "\u001B[37m -> keyCustomModelData: " + keyCustomModelData,
-                    "\u001B[36mID: " + crateID + "\u001B[37m -> baseEntityModel: " + baseEntityModel,
-                    "\u001B[36mID: " + crateID + "\u001B[37m -> animation: " + animation,
-                    "\u001B[36mID: " + crateID + "\u001B[37m -> rewards: " + rewardsName,
-                    "\u001B[32m======================================================================================\u001B[0m"
+            showRenderedCrates("&a",
+                    "&9==============================================================================&a",
+                    "&a" + crateID + "&b -> namespace: &a" + namespace,
+                    "&a" + crateID + "&b -> crateDisplayName: &a" + crateDisplayName,
+                    "&a" + crateID + "&b -> crateCustomModelData: &a" + crateCustomModelData,
+                    "&a" + crateID + "&b -> keyDisplayName: &a" + keyDisplayName,
+                    "&a" + crateID + "&b -> keyCustomModelData: &a" + keyCustomModelData,
+                    "&a" + crateID + "&b -> baseEntityModel: &a" + baseEntityModel,
+                    "&a" + crateID + "&b -> animation: &a" + animation,
+                    "&a" + crateID + "&b -> rewards: &a" + rewardsName,
+                    "&9==============================================================================&a"
             );
 
             List<Reward> rewardList = new ArrayList<>();
@@ -66,7 +68,6 @@ public class DefaultCrateRenderer implements CrateRenderer {
                 rewardList.add(reward);
             }
 
-            PluginLogger.getGlobal().info("Recompensas para a caixa: " + crateID + " || Lista: " + rewardList);
             Crate crate = CrateBuilder.builder()
                     .setCrateKey(keyDisplayName, keyCustomModelData, namespace)
                     .setId(crateID)
@@ -78,18 +79,27 @@ public class DefaultCrateRenderer implements CrateRenderer {
                     .addRewards(rewardList)
                     .build();
 
-            crateCache.add(crate.getNameSpace(), crate);
-            crateCache.addKeys(crate.getNameSpace());
-            crateCache.addCrateById(crate.getId(), crate);
+            ColoredLogger.info(crate.getId());
+            ColoredLogger.info(crate.getAnimation());
+            ColoredLogger.info(crate.getNameSpace());
+            ColoredLogger.info(crate.getBaseEntityModel());
+            ColoredLogger.info(" " + crateCacheService.getCrateById(crate.getId()));
+            ColoredLogger.info(crate.getId());
+
+            crateCacheService.add(crate.getNameSpace(), crate);
+            crateCacheService.addNameSpacedToList(crate.getNameSpace());
+            crateCacheService.addCrateById(crate.getId(), crate);
             rewardCache.addRewardsForCrate(crate, rewardList);
+            ColoredLogger.info(" " + crateCacheService.getCrateById(crate.getId()));
             cratesAmount++;
         }
-        PluginLogger.getGlobal().info("Quantidade de caixas e keys carregadas: " + cratesAmount);
+        ColoredLogger.info("&aQuantidade de caixas e keys carregadas: &5" + cratesAmount);
     }
 
     public void showRenderedCrates(String... strings) {
         for (String string : strings) {
-            PluginLogger.getGlobal().info(string);
+            ColoredLogger.info(string);
         }
     }
+
 }

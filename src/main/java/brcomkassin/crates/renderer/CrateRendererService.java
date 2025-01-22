@@ -2,6 +2,6 @@ package brcomkassin.crates.renderer;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
-public interface CrateRenderer {
+public interface CrateRendererService {
     void load(FileConfiguration config);
 }

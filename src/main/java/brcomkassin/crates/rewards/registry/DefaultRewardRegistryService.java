@@ -1,7 +1,6 @@
 package brcomkassin.crates.rewards.registry;
 
 import brcomkassin.commands.RewardCommand;
-import brcomkassin.crates.cache.CrateCache;
 import brcomkassin.crates.rewards.renderer.DefaultRewardRenderer;
 import brcomkassin.crates.rewards.renderer.RewardRenderer;
 import brcomkassin.crates.rewards.cache.CacheDependencyResolver;

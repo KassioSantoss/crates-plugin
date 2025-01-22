@@ -1,7 +1,5 @@
 package brcomkassin;
 
-import brcomkassin.crates.location.registry.CrateLocationRegistryService;
-import brcomkassin.crates.location.registry.DefaultCrateLocationRegistryService;
 import brcomkassin.crates.registrys.CrateRegistryService;
 import brcomkassin.crates.registrys.DefaultCrateRegistryService;
 import brcomkassin.crates.rewards.cache.CacheDependencyResolver;
@@ -22,7 +20,6 @@ public final class CratesPlugin extends JavaPlugin {
     private final CacheDependencyResolver dependencyResolver = new CacheDependencyService();
     private final CrateRegistryService crateRegistryService = new DefaultCrateRegistryService(this, dependencyResolver, locationConfig);
     private final RewardRegistryService rewardRegistryService = new DefaultRewardRegistryService(this, dependencyResolver);
-    private final CrateLocationRegistryService crateLocationRegistryService = new DefaultCrateLocationRegistryService(dependencyResolver);
 
     @Override
     public void onLoad() {
@@ -36,7 +33,6 @@ public final class CratesPlugin extends JavaPlugin {
         crateConfig.reloadDefaultConfig();
         rewardRegistryService.registry(itemRarityConfig);
         crateRegistryService.registry(crateConfig);
-        crateLocationRegistryService.registry(locationConfig);
         getLogger().info("Plugin CRATES inicializado com sucesso!");
     }
 

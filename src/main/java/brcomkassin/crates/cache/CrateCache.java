@@ -1,32 +1,54 @@
 package brcomkassin.crates.cache;
 
-import brcomkassin.crates.location.CrateLocation;
 import brcomkassin.crates.Crate;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public interface CrateCache {
+public class CrateCache implements CrateCacheService {
 
-    void add(String key, Crate crate);
+    private final Map<String, Crate> cache;
+    private final Set<String> cratesSet;
+    private final Map<String, Crate> crateIdMap;
 
-    void removeCreateLocation(CrateLocation crateLocation, Crate crate);
+    public CrateCache() {
+        this.cache = new HashMap<>();
+        this.cratesSet = new HashSet<>();
+        this.crateIdMap = new HashMap<>();
+    }
 
-    void remove(String key);
+    @Override
+    public void add(String key, Crate crate) {
+        cache.put(key, crate);
+    }
 
-    Crate getCrate(String key);
+    @Override
+    public void remove(String key) {
+        cache.remove(key);
+    }
 
-    void addKeys(String key);
+    @Override
+    public Crate getCrate(String key) {
+        return cache.get(key);
+    }
 
-    List<String> getKeys();
+    @Override
+    public void addNameSpacedToList(String key) {
+        cratesSet.add(key);
+    }
 
-    Crate getCrateByLocation(CrateLocation location);
+    @Override
+    public List<String> getNameSpacedList() {
+        return new ArrayList<>(cratesSet.stream().toList());
+    }
 
-    void addCrateByLocation(CrateLocation location, Crate crate);
+    @Override
+    public void addCrateById(String name, Crate crate) {
+        crateIdMap.put(name, crate);
+    }
 
-    Map<CrateLocation, Crate> getLocationCrateMap();
+    @Override
+    public Crate getCrateById(String name) {
+        return crateIdMap.get(name);
+    }
 
-    void addCrateById(String name, Crate crate);
-
-    Crate getCrateById(String name);
 }

@@ -3,6 +3,7 @@ package brcomkassin.crates;
 import brcomkassin.crates.key.CrateKey;
 import brcomkassin.crates.rewards.Reward;
 import lombok.Data;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
@@ -18,4 +19,5 @@ public class Crate {
     private final String animation;
     private final ItemStack crateItem;
     private final List<Reward> rewards;
+    private final EntityType entityType = EntityType.ARMOR_STAND;
 }

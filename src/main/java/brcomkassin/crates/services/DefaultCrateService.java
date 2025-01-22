@@ -1,37 +1,33 @@
 package brcomkassin.crates.services;
 
-import brcomkassin.crates.location.CrateLocation;
+import brcomkassin.CratesPlugin;
 import brcomkassin.crates.Crate;
-import brcomkassin.crates.cache.CrateCache;
 import brcomkassin.crates.manager.CrateManager;
 import brcomkassin.crates.rewards.RewardCalculator;
 import brcomkassin.crates.rewards.animation.RewardHandlerAnimation;
 import brcomkassin.crates.rewards.cache.RewardCache;
-import brcomkassin.utils.Config;
 import com.ticxo.modelengine.api.ModelEngineAPI;
 import com.ticxo.modelengine.api.animation.handler.AnimationHandler;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import java.util.List;
+import org.bukkit.persistence.PersistentDataType;
+
 import java.util.Map;
 
 public class DefaultCrateService implements CrateService {
 
-    private final Config locationConfiguration;
     private final CrateManager crateManager;
-    private final CrateCache crateCache;
     private final RewardCalculator rewardCalculator;
     private final RewardHandlerAnimation rewardHandlerAnimation;
 
-    public DefaultCrateService(Config locationConfiguration, CrateManager crateManager, CrateCache crateCache, RewardCache rewardCache) {
-        this.locationConfiguration = locationConfiguration;
+    public DefaultCrateService(CrateManager crateManager, RewardCache rewardCache) {
         this.crateManager = crateManager;
-        this.crateCache = crateCache;
         this.rewardCalculator = new RewardCalculator(rewardCache);
         this.rewardHandlerAnimation = new RewardHandlerAnimation(rewardCalculator);
     }
@@ -39,15 +35,16 @@ public class DefaultCrateService implements CrateService {
     @Override
     public void summonCrate(Player player, Location location, Crate crate) {
         Location centeredLocation = location.getBlock().getLocation().add(0.5, 0, 0.5);
-        CrateLocation crateLocation = CrateLocation.of(centeredLocation);
-        if (crateCache.getLocationCrateMap().containsKey(crateLocation)) return;
 
-        ArmorStand box = centeredLocation.getWorld().spawn(centeredLocation, ArmorStand.class);
+        if (!location.getNearbyEntities(1, 1, 1).isEmpty()) return;
+
+        ArmorStand box = (ArmorStand) centeredLocation.getWorld().spawnEntity(centeredLocation, crate.getEntityType());
+
         ModeledEntity modeledEntity = ModelEngineAPI.createModeledEntity(box);
         ActiveModel activeModel = ModelEngineAPI.createActiveModel(crate.getBaseEntityModel());
 
         if (activeModel == null) {
-            throw new RuntimeException("Não foi encontrado nenhum modelo com esse id de caixa: " + crate.getNameSpace());
+            throw new RuntimeException("Não foi encontrado nenhum modelo com esse id de caixa: " + crate.getId());
         }
 
         double deltaX = player.getLocation().getX() - centeredLocation.getX();
@@ -55,22 +52,26 @@ public class DefaultCrateService implements CrateService {
         float yaw = (float) Math.toDegrees(Math.atan2(-deltaX, deltaZ));
         yaw -= 180.0f;
 
-        box.setVisible(false);
+        box.setInvisible(true);
         box.setInvulnerable(true);
         box.setCanMove(false);
-        box.setSmall(true);
-        box.setSmall(false);
         box.setRotation(yaw, 0.0f);
+        box.setPersistent(true);
+
+        box.getPersistentDataContainer().set(new NamespacedKey(CratesPlugin.getInstance(),
+                crate.getNameSpace()), PersistentDataType.STRING, crate.getNameSpace());
+
+        activeModel.setHitboxVisible(true);
+        activeModel.setHitboxScale(0.9);
+
         modeledEntity.addModel(activeModel, true);
-        crateCache.addCrateByLocation(crateLocation, crate);
 
-        String s = crateLocation + ":" + crate.getId();
-
-        List<String> locations = locationConfiguration.getStringList("crateLocations.locations");
-        locations.add(s);
-
-        locationConfiguration.set("crateLocations.locations", locations);
-        locationConfiguration.saveConfig();
+        int itemAmount = player.getInventory().getItemInMainHand().getAmount() - 1;
+        if (itemAmount > 1) {
+            player.getInventory().getItemInMainHand().setAmount(itemAmount);
+        } else {
+            player.getInventory().remove(crate.getCrateItem());
+        }
         player.sendMessage("Caixa spawnada com sucesso!");
     }
 
@@ -87,18 +88,22 @@ public class DefaultCrateService implements CrateService {
         boolean keyItem = crateManager.isKeyItem(item);
         if (!keyItem) return;
 
-        Crate crate = crateManager.getCrateFromKey(item);
-        final Location entityLocation = entity.getLocation();
-        CrateLocation crateLocation = CrateLocation.of(entityLocation);
-        Crate crateTarget = crateCache.getCrateByLocation(crateLocation);
+        Crate crate = crateManager.getCrate(item);
 
-        if (crate == null || crateTarget == null) return;
-        if (!crate.getNameSpace().equals(crateTarget.getNameSpace())) return;
+        NamespacedKey namespacedKey = new NamespacedKey(CratesPlugin.getInstance(), crate.getNameSpace());
+
+        if (!entity.getPersistentDataContainer().has(namespacedKey)) return;
 
         ActiveModel activeModel = activeModels.get(crate.getBaseEntityModel());
         AnimationHandler animationHandler = activeModel.getAnimationHandler();
         animationHandler.playAnimation(crate.getAnimation(), 0.3, 0.3, 1, true);
 
+        int itemAmount = item.getAmount() - 1;
+        if (itemAmount > 0) {
+            item.setAmount(itemAmount);
+        } else {
+            player.getInventory().remove(item);
+        }
         rewardHandlerAnimation.animReward(player, entity, crate);
         player.sendMessage("Caixa aberta com sucesso!");
     }

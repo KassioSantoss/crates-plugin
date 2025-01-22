@@ -1,11 +1,11 @@
 package brcomkassin.crates.registrys;
 
 import brcomkassin.commands.CrateCommand;
-import brcomkassin.crates.cache.CrateCache;
+import brcomkassin.crates.cache.CrateCacheService;
 import brcomkassin.crates.listeners.CrateInteractListener;
 import brcomkassin.crates.listeners.CratePlaceListener;
 import brcomkassin.crates.manager.CrateManager;
-import brcomkassin.crates.renderer.CrateRenderer;
+import brcomkassin.crates.renderer.CrateRendererService;
 import brcomkassin.crates.renderer.DefaultCrateRenderer;
 import brcomkassin.crates.rewards.cache.CacheDependencyResolver;
 import brcomkassin.crates.rewards.cache.RewardCache;
@@ -21,19 +21,19 @@ public class DefaultCrateRegistryService implements CrateRegistryService {
     private final CrateInteractListener crateInteractListener;
     private final CratePlaceListener cratePlaceListener;
     private final CrateCommand crateCommand;
-    private final CrateRenderer crateRenderer;
+    private final CrateRendererService crateRenderer;
     private final JavaPlugin plugin;
 
     public DefaultCrateRegistryService(JavaPlugin plugin, CacheDependencyResolver resolver, Config locationConfig) {
         this.plugin = plugin;
-        CrateCache crateCache = resolver.getCrateCache();
+        CrateCacheService crateCacheD = resolver.getCrateCache();
         RewardCache rewardCache = resolver.getRewardCache();
-        CrateManager crateManager = new CrateManager(crateCache);
-        CrateService crateService = new DefaultCrateService(locationConfig, crateManager, crateCache, rewardCache);
+        CrateManager crateManager = new CrateManager(crateCacheD);
+        CrateService crateService = new DefaultCrateService(crateManager, rewardCache);
         this.crateInteractListener = new CrateInteractListener(crateService);
         this.cratePlaceListener = new CratePlaceListener(crateService, crateManager);
-        this.crateCommand = new CrateCommand(crateCache);
-        this.crateRenderer = new DefaultCrateRenderer(crateCache, rewardCache);
+        this.crateCommand = new CrateCommand(resolver.getCrateCache());
+        this.crateRenderer = new DefaultCrateRenderer(crateCacheD, rewardCache);
     }
 
     @Override

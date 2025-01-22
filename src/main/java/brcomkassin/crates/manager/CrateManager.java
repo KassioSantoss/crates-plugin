@@ -2,7 +2,7 @@ package brcomkassin.crates.manager;
 
 import brcomkassin.crates.Crate;
 import brcomkassin.crates.CrateMaterial;
-import brcomkassin.crates.cache.CrateCache;
+import brcomkassin.crates.cache.CrateCacheService;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
@@ -13,9 +13,9 @@ import java.util.Objects;
 
 public class CrateManager {
 
-    private final CrateCache cache;
+    private final CrateCacheService cache;
 
-    public CrateManager(CrateCache cache) {
+    public CrateManager(CrateCacheService cache) {
         this.cache = cache;
     }
 
@@ -52,7 +52,7 @@ public class CrateManager {
                 .findFirst()
                 .orElse(null);
     }
-    public Crate getCrateFromKey(ItemStack item) {
+    public Crate getCrate(ItemStack item) {
         if (item == null || !item.hasItemMeta() || item.getType() != CrateMaterial.DEFAULT_KEY_MATERIAL.getMaterial())
             return null;
 

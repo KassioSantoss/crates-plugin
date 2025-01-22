@@ -5,11 +5,11 @@ import brcomkassin.crates.cache.CrateCacheService;
 
 public class CacheDependencyService implements CacheDependencyResolver {
     private final RewardCache rewardCache;
-    private final CrateCache crateCache;
+    private final CrateCacheService crateCacheService;
 
     public CacheDependencyService() {
         this.rewardCache = new RewardCacheService();
-        this.crateCache = new CrateCacheService();
+        this.crateCacheService = new CrateCache();
     }
 
     @Override
@@ -18,7 +18,7 @@ public class CacheDependencyService implements CacheDependencyResolver {
     }
 
     @Override
-    public CrateCache getCrateCache() {
-        return crateCache;
+    public CrateCacheService getCrateCache() {
+        return crateCacheService;
     }
 }
