@@ -17,6 +17,8 @@ public interface CrateCacheService {
 
     List<String> getNameSpacedList();
 
+    List<String> getCratesByIdList();
+
     void addCrateById(String name, Crate crate);
 
     Crate getCrateById(String name);

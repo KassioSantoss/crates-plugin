@@ -44,7 +44,7 @@ public class CrateCommand implements CommandExecutor, TabExecutor {
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
-        List<String> arguments = new ArrayList<>(crateCacheService.getNameSpacedList());
+        List<String> arguments = crateCacheService.getCratesByIdList();
         if (args.length == 1) {
             return arguments;
         }

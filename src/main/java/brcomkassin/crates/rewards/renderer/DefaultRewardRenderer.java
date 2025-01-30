@@ -45,7 +45,6 @@ public class DefaultRewardRenderer implements RewardRenderer {
             Reward reward = Reward.of(rewardItem, displayName, lore, namespace, customModelData, rarity);
             rewardCache.addRewardById(rewardsID, reward);
             rewardCache.addRewardKey(rewardsID);
-
         }
     }
 

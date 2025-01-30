@@ -7,6 +7,8 @@ import brcomkassin.crates.listeners.CratePlaceListener;
 import brcomkassin.crates.manager.CrateManager;
 import brcomkassin.crates.renderer.CrateRendererService;
 import brcomkassin.crates.renderer.DefaultCrateRenderer;
+import brcomkassin.crates.rewards.RewardCalculator;
+import brcomkassin.crates.rewards.animation.RewardAnimationHandler;
 import brcomkassin.crates.rewards.cache.CacheDependencyResolver;
 import brcomkassin.crates.rewards.cache.RewardCache;
 import brcomkassin.crates.services.CrateService;
@@ -24,12 +26,14 @@ public class DefaultCrateRegistryService implements CrateRegistryService {
     private final CrateRendererService crateRenderer;
     private final JavaPlugin plugin;
 
-    public DefaultCrateRegistryService(JavaPlugin plugin, CacheDependencyResolver resolver, Config locationConfig) {
+    public DefaultCrateRegistryService(JavaPlugin plugin, CacheDependencyResolver resolver) {
         this.plugin = plugin;
         CrateCacheService crateCacheD = resolver.getCrateCache();
         RewardCache rewardCache = resolver.getRewardCache();
         CrateManager crateManager = new CrateManager(crateCacheD);
-        CrateService crateService = new DefaultCrateService(crateManager, rewardCache);
+        RewardCalculator rewardCalculator = new RewardCalculator(rewardCache);
+        RewardAnimationHandler rewardAnimationHandler = new RewardAnimationHandler(plugin, rewardCalculator);
+        CrateService crateService = new DefaultCrateService(crateManager, rewardAnimationHandler);
         this.crateInteractListener = new CrateInteractListener(crateService);
         this.cratePlaceListener = new CratePlaceListener(crateService, crateManager);
         this.crateCommand = new CrateCommand(resolver.getCrateCache());

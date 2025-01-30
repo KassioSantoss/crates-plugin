@@ -9,7 +9,11 @@ crates:
       custom_model_data: 456
     base_entity_model:
       model_id: "test_model"
-      animation: "open"
+    animation:
+      name: "open"
+      type: "particle"
+      value: 1
+      color: "BLUE"
     rewards:
       - "reward_id_1"
       - "reward_id_2"

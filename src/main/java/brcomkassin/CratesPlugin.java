@@ -16,9 +16,8 @@ public final class CratesPlugin extends JavaPlugin {
     private static CratesPlugin instance;
     private final Config itemRarityConfig = new Config(this, "itemrarity.yml");
     private final Config crateConfig = new Config(this, "crate.yml");
-    private final Config locationConfig = new Config(this, "cratelocation.yml");
     private final CacheDependencyResolver dependencyResolver = new CacheDependencyService();
-    private final CrateRegistryService crateRegistryService = new DefaultCrateRegistryService(this, dependencyResolver, locationConfig);
+    private final CrateRegistryService crateRegistryService = new DefaultCrateRegistryService(this, dependencyResolver);
     private final RewardRegistryService rewardRegistryService = new DefaultRewardRegistryService(this, dependencyResolver);
 
     @Override
@@ -28,7 +27,6 @@ public final class CratesPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        locationConfig.reloadDefaultConfig();
         itemRarityConfig.reloadDefaultConfig();
         crateConfig.reloadDefaultConfig();
         rewardRegistryService.registry(itemRarityConfig);
@@ -40,7 +38,6 @@ public final class CratesPlugin extends JavaPlugin {
     public void onDisable() {
         itemRarityConfig.saveConfig();
         crateConfig.saveConfig();
-        locationConfig.saveConfig();
     }
 }
 

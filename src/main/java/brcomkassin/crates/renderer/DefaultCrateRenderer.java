@@ -79,18 +79,10 @@ public class DefaultCrateRenderer implements CrateRendererService {
                     .addRewards(rewardList)
                     .build();
 
-            ColoredLogger.info(crate.getId());
-            ColoredLogger.info(crate.getAnimation());
-            ColoredLogger.info(crate.getNameSpace());
-            ColoredLogger.info(crate.getBaseEntityModel());
-            ColoredLogger.info(" " + crateCacheService.getCrateById(crate.getId()));
-            ColoredLogger.info(crate.getId());
-
             crateCacheService.add(crate.getNameSpace(), crate);
             crateCacheService.addNameSpacedToList(crate.getNameSpace());
             crateCacheService.addCrateById(crate.getId(), crate);
             rewardCache.addRewardsForCrate(crate, rewardList);
-            ColoredLogger.info(" " + crateCacheService.getCrateById(crate.getId()));
             cratesAmount++;
         }
         ColoredLogger.info("&aQuantidade de caixas e keys carregadas: &5" + cratesAmount);

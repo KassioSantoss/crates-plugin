@@ -3,11 +3,8 @@ package brcomkassin.crates.services;
 import brcomkassin.CratesPlugin;
 import brcomkassin.crates.Crate;
 import brcomkassin.crates.manager.CrateManager;
-import brcomkassin.crates.rewards.RewardCalculator;
-import brcomkassin.crates.rewards.animation.RewardHandlerAnimation;
-import brcomkassin.crates.rewards.cache.RewardCache;
+import brcomkassin.crates.rewards.animation.RewardAnimationHandler;
 import com.ticxo.modelengine.api.ModelEngineAPI;
-import com.ticxo.modelengine.api.animation.handler.AnimationHandler;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
 import org.bukkit.Location;
@@ -18,18 +15,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.Map;
-
 public class DefaultCrateService implements CrateService {
 
     private final CrateManager crateManager;
-    private final RewardCalculator rewardCalculator;
-    private final RewardHandlerAnimation rewardHandlerAnimation;
+    private final RewardAnimationHandler rewardAnimationHandler;
 
-    public DefaultCrateService(CrateManager crateManager, RewardCache rewardCache) {
+    public DefaultCrateService(CrateManager crateManager, RewardAnimationHandler rewardAnimationHandler) {
         this.crateManager = crateManager;
-        this.rewardCalculator = new RewardCalculator(rewardCache);
-        this.rewardHandlerAnimation = new RewardHandlerAnimation(rewardCalculator);
+        this.rewardAnimationHandler = rewardAnimationHandler;
     }
 
     @Override
@@ -57,6 +50,7 @@ public class DefaultCrateService implements CrateService {
         box.setCanMove(false);
         box.setRotation(yaw, 0.0f);
         box.setPersistent(true);
+        box.setSmall(true);
 
         box.getPersistentDataContainer().set(new NamespacedKey(CratesPlugin.getInstance(),
                 crate.getNameSpace()), PersistentDataType.STRING, crate.getNameSpace());
@@ -66,11 +60,11 @@ public class DefaultCrateService implements CrateService {
 
         modeledEntity.addModel(activeModel, true);
 
-        int itemAmount = player.getInventory().getItemInMainHand().getAmount() - 1;
+        int itemAmount = player.getInventory().getItemInMainHand().getAmount();
         if (itemAmount > 1) {
-            player.getInventory().getItemInMainHand().setAmount(itemAmount);
+            player.getInventory().getItemInMainHand().setAmount(itemAmount - 1);
         } else {
-            player.getInventory().remove(crate.getCrateItem());
+            player.getInventory().remove(player.getInventory().getItemInMainHand());
         }
         player.sendMessage("Caixa spawnada com sucesso!");
     }
@@ -78,12 +72,6 @@ public class DefaultCrateService implements CrateService {
     @Override
     public void openCrate(Player player, Entity entity, ItemStack item) {
         if (!crateManager.isCrateEntity(entity)) return;
-
-        ModeledEntity modeledEntity = ModelEngineAPI.getModeledEntity(entity);
-        if (modeledEntity == null) return;
-
-        Map<String, ActiveModel> activeModels = modeledEntity.getModels();
-        if (activeModels.isEmpty()) return;
 
         boolean keyItem = crateManager.isKeyItem(item);
         if (!keyItem) return;
@@ -94,17 +82,13 @@ public class DefaultCrateService implements CrateService {
 
         if (!entity.getPersistentDataContainer().has(namespacedKey)) return;
 
-        ActiveModel activeModel = activeModels.get(crate.getBaseEntityModel());
-        AnimationHandler animationHandler = activeModel.getAnimationHandler();
-        animationHandler.playAnimation(crate.getAnimation(), 0.3, 0.3, 1, true);
-
         int itemAmount = item.getAmount() - 1;
         if (itemAmount > 0) {
             item.setAmount(itemAmount);
         } else {
             player.getInventory().remove(item);
         }
-        rewardHandlerAnimation.animReward(player, entity, crate);
+        rewardAnimationHandler.initialTask(player, entity, crate);
         player.sendMessage("Caixa aberta com sucesso!");
     }
 

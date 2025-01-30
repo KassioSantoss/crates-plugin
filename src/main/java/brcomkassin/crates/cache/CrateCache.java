@@ -7,12 +7,12 @@ import java.util.*;
 public class CrateCache implements CrateCacheService {
 
     private final Map<String, Crate> cache;
-    private final Set<String> cratesSet;
+    private final List<String> cratesNameSpacedList;
     private final Map<String, Crate> crateIdMap;
 
     public CrateCache() {
         this.cache = new HashMap<>();
-        this.cratesSet = new HashSet<>();
+        this.cratesNameSpacedList = new ArrayList<>();
         this.crateIdMap = new HashMap<>();
     }
 
@@ -33,12 +33,17 @@ public class CrateCache implements CrateCacheService {
 
     @Override
     public void addNameSpacedToList(String key) {
-        cratesSet.add(key);
+        cratesNameSpacedList.add(key);
     }
 
     @Override
     public List<String> getNameSpacedList() {
-        return new ArrayList<>(cratesSet.stream().toList());
+        return cratesNameSpacedList;
+    }
+
+    @Override
+    public List<String> getCratesByIdList() {
+        return crateIdMap.keySet().stream().toList();
     }
 
     @Override

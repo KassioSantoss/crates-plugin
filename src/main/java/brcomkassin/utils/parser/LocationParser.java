@@ -1,4 +1,4 @@
-package brcomkassin.crates.location.parser;
+package brcomkassin.utils.parser;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
