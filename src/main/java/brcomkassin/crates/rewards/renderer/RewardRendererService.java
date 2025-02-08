@@ -2,7 +2,7 @@ package brcomkassin.crates.rewards.renderer;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
-public interface RewardRenderer {
+public interface RewardRendererService {
 
     void renderer(FileConfiguration fileConfiguration);
 

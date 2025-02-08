@@ -1,0 +1,22 @@
+rewards:
+  reward_id_1:
+    item_type: DIAMOND_SWORD
+    display_name: '&aReward Example'
+    lore:
+      - Lore Example
+      - Lore Example
+      - Lore Example
+    namespace: unique_id
+    custom_model_data: 1
+    rarity: COMMON
+  reward_id_2:
+    item_type: DIAMOND_SWORD
+    display_name: '&aReward Example'
+    lore:
+      - Lore Example
+      - Lore Example
+      - Lore Example
+    namespace: test
+    custom_model_data: 0
+    rarity: COMMON
+

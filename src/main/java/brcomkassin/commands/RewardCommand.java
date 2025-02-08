@@ -1,7 +1,9 @@
 package brcomkassin.commands;
 
+import brcomkassin.cachedepency.CacheDependencyResolverService;
 import brcomkassin.crates.rewards.Reward;
 import brcomkassin.crates.rewards.cache.RewardCache;
+import brcomkassin.crates.rewards.cache.RewardCacheService;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -15,10 +17,10 @@ import java.util.List;
 
 public class RewardCommand implements CommandExecutor, TabExecutor {
 
-    private final RewardCache rewardCache;
+    private final CacheDependencyResolverService resolverService;
 
-    public RewardCommand(RewardCache rewardCache) {
-        this.rewardCache = rewardCache;
+    public RewardCommand(CacheDependencyResolverService resolverService) {
+        this.resolverService = resolverService;
     }
 
     @Override
@@ -28,14 +30,14 @@ public class RewardCommand implements CommandExecutor, TabExecutor {
         if (args.length < 1) {
             return true;
         }
-        Reward reward = rewardCache.findRewardById(args[0]);
+        Reward reward = resolverService.getRewardCache().findRewardById(args[0]);
         player.getInventory().addItem(reward.getItem());
         return false;
     }
 
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
-        final List<String> keys = rewardCache.getAllRewardKeys();
+        final List<String> keys = resolverService.getRewardCache().getAllRewardKeys();
         final List<String> arguments = new ArrayList<>(keys);
         return args.length == 1 ? arguments : List.of();
     }

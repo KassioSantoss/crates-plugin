@@ -2,6 +2,7 @@ package brcomkassin.crates;
 
 import brcomkassin.crates.key.CrateKey;
 import brcomkassin.crates.rewards.Reward;
+import brcomkassin.crates.rewards.animation.AnimationProperties;
 import lombok.Data;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
@@ -16,8 +17,8 @@ public class Crate {
     private final String crateDisplayName;
     private final int crateCustomModelData;
     private final String baseEntityModel;
-    private final String animation;
     private final ItemStack crateItem;
     private final List<Reward> rewards;
+    private final AnimationProperties animationProperties;
     private final EntityType entityType = EntityType.ARMOR_STAND;
 }

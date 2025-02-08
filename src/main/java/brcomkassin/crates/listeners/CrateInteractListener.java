@@ -1,6 +1,6 @@
 package brcomkassin.crates.listeners;
 
-import brcomkassin.crates.rewards.animation.RewardAnimationHandler;
+import brcomkassin.crates.rewards.animation.utils.AnimationUtilsManager;
 import brcomkassin.crates.services.CrateService;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -28,7 +28,7 @@ public class CrateInteractListener implements Listener {
 
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
-        if (RewardAnimationHandler.PLAYERS.contains(event.getPlayer())) {
+        if (AnimationUtilsManager.PLAYERS_IN_SPECTATOR_MODE.contains(event.getPlayer().getName())) {
             event.setCancelled(true);
         }
     }

@@ -3,20 +3,54 @@ package brcomkassin.crates.rewards.cache;
 import brcomkassin.crates.Crate;
 import brcomkassin.crates.rewards.Reward;
 
-import java.util.List;
+import java.util.*;
 
-public interface RewardCache {
+public class RewardCache implements RewardCacheService {
 
-    void addRewardById(String id, Reward reward);
+    private final Map<Crate, List<Reward>> crateToRewards;
+    private final Map<String, Reward> rewardById;
+    private final Set<String> rewardKeys;
 
-    void addRewardKey(String key);
+    public RewardCache() {
+        this.crateToRewards = new HashMap<>();
+        this.rewardById = new HashMap<>();
+        this.rewardKeys = new HashSet<>();
+    }
 
-    void addRewardsForCrate(Crate crate, List<Reward> rewards);
+    @Override
+    public void addRewardById(String id, Reward reward) {
+        rewardById.put(id, reward);
+    }
 
-    List<String> getAllRewardKeys();
+    @Override
+    public void addRewardKey(String key) {
+        rewardKeys.add(key);
+    }
 
-    List<Reward> getRewardsForCrate(Crate crate);
+    @Override
+    public List<String> getAllRewardKeys() {
+        return new ArrayList<>(rewardKeys);
+    }
 
-    Reward findRewardById(String id);
+    @Override
+    public Reward findRewardById(String id) {
+        return rewardById.get(id);
+    }
 
+    @Override
+    public void clear() {
+        crateToRewards.clear();
+        rewardById.clear();
+        rewardKeys.clear();
+    }
+
+    @Override
+    public List<Reward> getRewardsForCrate(Crate crate) {
+        return crateToRewards.get(crate);
+    }
+
+    @Override
+    public void addRewardsForCrate(Crate crate, List<Reward> rewards) {
+        crateToRewards.put(crate, rewards);
+    }
 }

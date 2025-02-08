@@ -1,26 +1,30 @@
 package brcomkassin.crates.rewards.renderer;
 
+import brcomkassin.cachedepency.CacheDependencyResolverService;
 import brcomkassin.crates.rewards.Reward;
-import brcomkassin.crates.rewards.cache.RewardCache;
 import brcomkassin.crates.rewards.rarity.RewardsRarity;
 import brcomkassin.utils.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
+
 import java.util.List;
 import java.util.Objects;
 
-public class DefaultRewardRenderer implements RewardRenderer {
+public class DefaultRewardRenderer implements RewardRendererService {
 
-    private final RewardCache rewardCache;
+    private static DefaultRewardRenderer instance;
 
-    public DefaultRewardRenderer(RewardCache rewardCache) {
-        this.rewardCache = rewardCache;
+    private final CacheDependencyResolverService resolverService;
+
+    public DefaultRewardRenderer(CacheDependencyResolverService resolverService) {
+        this.resolverService = resolverService;
     }
 
     @Override
     public void renderer(FileConfiguration fileConfiguration) {
+
         ConfigurationSection rewardsSection = fileConfiguration.getConfigurationSection("rewards");
         Objects.requireNonNull(rewardsSection, "Invalid Configuration Section 'rewards' not found.");
 
@@ -43,8 +47,9 @@ public class DefaultRewardRenderer implements RewardRenderer {
                     .build();
 
             Reward reward = Reward.of(rewardItem, displayName, lore, namespace, customModelData, rarity);
-            rewardCache.addRewardById(rewardsID, reward);
-            rewardCache.addRewardKey(rewardsID);
+            resolverService.getRewardCache().addRewardById(rewardsID, reward);
+            resolverService.getRewardCache().addRewardKey(rewardsID);
+
         }
     }
 

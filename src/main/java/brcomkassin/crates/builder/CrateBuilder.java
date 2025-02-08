@@ -4,11 +4,13 @@ import brcomkassin.crates.Crate;
 import brcomkassin.crates.key.CrateKey;
 import brcomkassin.crates.CrateMaterial;
 import brcomkassin.crates.rewards.Reward;
+import brcomkassin.crates.rewards.animation.AnimationProperties;
+import brcomkassin.crates.rewards.animation.AnimationType;
+import brcomkassin.crates.rewards.animation.factory.ColorFactory;
 import brcomkassin.utils.ItemBuilder;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Logger;
@@ -21,15 +23,18 @@ public class CrateBuilder {
     private String crateDisplayName;
     private int crateCustomModelData;
     private String baseEntityModel;
-    private String animation;
     private final List<Reward> rewardList;
+    private String value;
+    private String color;
+//    private String animation;
 
     public CrateBuilder() {
+        this.value = "0";
+        this.color = "BLACK";
         this.crateKey = null;
         this.crateDisplayName = "Default Crate Name";
         this.crateCustomModelData = 0;
         this.baseEntityModel = "crate_example";
-        this.animation = "open";
         this.rewardList = new ArrayList<>();
     }
 
@@ -52,13 +57,23 @@ public class CrateBuilder {
         return this;
     }
 
+//    public CrateBuilder setAnimation(String animation) {
+//        this.animation = animation;
+//        return this;
+//    }
+
     public CrateBuilder setBaseEntityModel(String baseEntityModel) {
         this.baseEntityModel = baseEntityModel;
         return this;
     }
 
-    public CrateBuilder setAnimation(String animation) {
-        this.animation = animation;
+    public CrateBuilder setValue(String value) {
+        this.value = value;
+        return this;
+    }
+
+    public CrateBuilder setColor(String color) {
+        this.color = color;
         return this;
     }
 
@@ -89,6 +104,9 @@ public class CrateBuilder {
             Logger.getGlobal().info("A lista de recompensas da caixa: " + id + " está vazia.");
         }
 
+        AnimationType animationType = AnimationType.fromString(value);
+        AnimationProperties properties = new AnimationProperties(animationType, ColorFactory.fromString(color));
+
         ItemStack crateItem = ItemBuilder.of(CrateMaterial.DEFAULT_CRATE_MATERIAL.getMaterial())
                 .setName(crateDisplayName)
                 .setCustomModelData(crateCustomModelData)
@@ -101,9 +119,9 @@ public class CrateBuilder {
                 crateDisplayName,
                 crateCustomModelData,
                 baseEntityModel,
-                animation,
                 crateItem,
-                rewardList);
+                rewardList,
+                properties);
     }
 }
 

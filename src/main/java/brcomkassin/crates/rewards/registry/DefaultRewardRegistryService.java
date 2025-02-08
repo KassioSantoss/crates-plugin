@@ -1,24 +1,21 @@
 package brcomkassin.crates.rewards.registry;
 
+import brcomkassin.cachedepency.CacheDependencyResolverService;
 import brcomkassin.commands.RewardCommand;
-import brcomkassin.crates.rewards.renderer.DefaultRewardRenderer;
-import brcomkassin.crates.rewards.renderer.RewardRenderer;
-import brcomkassin.crates.rewards.cache.CacheDependencyResolver;
-import brcomkassin.crates.rewards.cache.RewardCache;
+import brcomkassin.crates.rewards.renderer.RewardRendererService;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class DefaultRewardRegistryService implements RewardRegistryService {
 
-    private final RewardRenderer rewardRenderer;
+    private final RewardRendererService rewardRenderer;
     private final JavaPlugin plugin;
     private final RewardCommand rewardCommand;
 
-    public DefaultRewardRegistryService(JavaPlugin plugin, CacheDependencyResolver resolver) {
+    public DefaultRewardRegistryService(JavaPlugin plugin, CacheDependencyResolverService resolverService, RewardRendererService rewardRenderer) {
+        this.rewardRenderer = rewardRenderer;
         this.plugin = plugin;
-        RewardCache rewardCache = resolver.getRewardCache();
-        this.rewardRenderer = new DefaultRewardRenderer(rewardCache);
-        this.rewardCommand = new RewardCommand(rewardCache);
+        this.rewardCommand = new RewardCommand(resolverService);
     }
 
     @Override

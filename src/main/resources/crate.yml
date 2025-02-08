@@ -10,8 +10,6 @@ crates:
     base_entity_model:
       model_id: "test_model"
     animation:
-      name: "open"
-      type: "particle"
       value: 1
       color: "BLUE"
     rewards:

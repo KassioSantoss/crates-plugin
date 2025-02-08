@@ -1,16 +1,16 @@
 package brcomkassin.crates.rewards;
 
+import brcomkassin.cachedepency.CacheDependencyResolverService;
 import brcomkassin.crates.Crate;
-import brcomkassin.crates.rewards.cache.RewardCache;
 
 import java.util.*;
 
 public class RewardCalculator {
 
-    private final RewardCache rewardCache;
+    private final CacheDependencyResolverService resolverService;
 
-    public RewardCalculator(RewardCache rewardCache) {
-        this.rewardCache = rewardCache;
+    public RewardCalculator(CacheDependencyResolverService resolverService) {
+        this.resolverService = resolverService;
     }
 
     /**
@@ -20,13 +20,11 @@ public class RewardCalculator {
      * @return Uma recompensa aleatória.
      */
     public Reward calculateReward(Crate crate) {
-        List<Reward> rewardsForCrate = rewardCache.getRewardsForCrate(crate);
+        List<Reward> rewardsForCrate = resolverService.getRewardCache().getRewardsForCrate(crate);
 
         if (rewardsForCrate.isEmpty()) {
             throw new IllegalStateException("Nenhuma recompensa configurada para a caixa: " + crate.getId());
         }
-
-        // Escolhe uma recompensa aleatória com base na probabilidade.
         return getRandomReward(rewardsForCrate);
     }
 

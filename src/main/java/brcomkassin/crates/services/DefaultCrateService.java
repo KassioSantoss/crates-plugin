@@ -1,9 +1,12 @@
 package brcomkassin.crates.services;
 
 import brcomkassin.CratesPlugin;
+import brcomkassin.cachedepency.CacheDependencyResolverService;
 import brcomkassin.crates.Crate;
 import brcomkassin.crates.manager.CrateManager;
-import brcomkassin.crates.rewards.animation.RewardAnimationHandler;
+import brcomkassin.crates.rewards.animation.AnimationType;
+import brcomkassin.crates.rewards.animation.factory.AnimationFactory;
+import brcomkassin.crates.rewards.animation.service.AnimationService;
 import com.ticxo.modelengine.api.ModelEngineAPI;
 import com.ticxo.modelengine.api.model.ActiveModel;
 import com.ticxo.modelengine.api.model.ModeledEntity;
@@ -18,11 +21,11 @@ import org.bukkit.persistence.PersistentDataType;
 public class DefaultCrateService implements CrateService {
 
     private final CrateManager crateManager;
-    private final RewardAnimationHandler rewardAnimationHandler;
+    private final AnimationFactory animationFactory;
 
-    public DefaultCrateService(CrateManager crateManager, RewardAnimationHandler rewardAnimationHandler) {
+    public DefaultCrateService(CrateManager crateManager, CacheDependencyResolverService resolverService) {
+        this.animationFactory = new AnimationFactory(resolverService);
         this.crateManager = crateManager;
-        this.rewardAnimationHandler = rewardAnimationHandler;
     }
 
     @Override
@@ -55,9 +58,8 @@ public class DefaultCrateService implements CrateService {
         box.getPersistentDataContainer().set(new NamespacedKey(CratesPlugin.getInstance(),
                 crate.getNameSpace()), PersistentDataType.STRING, crate.getNameSpace());
 
-        activeModel.setHitboxVisible(true);
-        activeModel.setHitboxScale(0.9);
-
+        activeModel.setHitboxScale(1.1);
+        activeModel.setMainHitbox(true);
         modeledEntity.addModel(activeModel, true);
 
         int itemAmount = player.getInventory().getItemInMainHand().getAmount();
@@ -88,7 +90,11 @@ public class DefaultCrateService implements CrateService {
         } else {
             player.getInventory().remove(item);
         }
-        rewardAnimationHandler.initialTask(player, entity, crate);
+
+        AnimationType animation = crate.getAnimationProperties().getAnimation();
+        AnimationService animationService = animationFactory.getAnimation(animation);
+
+        animationService.run(player, entity, crate);
         player.sendMessage("Caixa aberta com sucesso!");
     }
 

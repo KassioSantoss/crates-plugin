@@ -56,4 +56,11 @@ public class CrateCache implements CrateCacheService {
         return crateIdMap.get(name);
     }
 
+    @Override
+    public void clear() {
+        cache.clear();
+        cratesNameSpacedList.clear();
+        crateIdMap.clear();
+    }
+
 }
